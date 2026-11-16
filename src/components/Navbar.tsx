@@ -14,6 +14,7 @@ const NAV_ITEMS = [
 export function Navbar() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState<string>('');
+  const [overHero, setOverHero] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
@@ -22,6 +23,10 @@ export function Navbar() {
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? Math.min(Math.max(scrollTop / docHeight, 0), 1) : 0;
       setScrollProgress(progress);
+
+      const heroEl = document.getElementById('hero');
+      const heroThreshold = heroEl ? heroEl.offsetHeight * 0.72 : 540;
+      setOverHero(scrollTop < heroThreshold);
 
       const sections = ['manifesto', 'atuacao', 'portfolio', 'visao', 'processo', 'contato'];
       let current = '';
@@ -54,14 +59,22 @@ export function Navbar() {
     setMobileOpen(false);
   };
 
+  const useDarkHeader = overHero && !mobileOpen;
+
   return (
     <>
-      <header className="fixed top-0 inset-x-0 z-50 bg-[#F2F0EB]/95 border-b border-[#111111]/10 text-[#111111]">
+      <header
+        className={`fixed top-0 inset-x-0 z-50 transition-colors duration-300 border-b ${
+          useDarkHeader
+            ? 'bg-[#0E0D0C]/68 border-white/10 text-[#F2F0EB]'
+            : 'bg-[#F2F0EB]/96 border-[#111111]/10 text-[#111111]'
+        }`}
+      >
         <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 h-16 flex items-center justify-between gap-8">
           {/* Zone 1: Brand Wordmark */}
           <a
             href="#hero"
-            className="text-xs sm:text-sm font-semibold tracking-[0.22em] text-[#111111] whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A58A58]"
+            className="text-xs sm:text-sm font-semibold tracking-[0.22em] whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A58A58]"
           >
             PRUMO CREATORS
           </a>
@@ -69,7 +82,9 @@ export function Navbar() {
           {/* Zone 2: Minimalist Single-Line Navigation Links */}
           <nav
             aria-label="Navegação principal"
-            className="hidden md:flex items-center gap-8 text-[11px] font-medium tracking-[0.14em] uppercase text-[#5C5A55]"
+            className={`hidden md:flex items-center gap-8 text-[11px] font-medium tracking-[0.14em] uppercase transition-colors duration-300 ${
+              useDarkHeader ? 'text-[#D0CCC4]' : 'text-[#5C5A55]'
+            }`}
           >
             {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.href;
@@ -78,7 +93,13 @@ export function Navbar() {
                   key={item.href}
                   href={item.href}
                   className={`relative py-1 whitespace-nowrap shrink-0 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A58A58] ${
-                    isActive ? 'text-[#111111]' : 'hover:text-[#111111]'
+                    isActive
+                      ? useDarkHeader
+                        ? 'text-[#F2F0EB]'
+                        : 'text-[#111111]'
+                      : useDarkHeader
+                        ? 'hover:text-[#F2F0EB]'
+                        : 'hover:text-[#111111]'
                   }`}
                 >
                   {item.label}
@@ -99,7 +120,11 @@ export function Navbar() {
               <MagneticButton strength={4}>
                 <a
                   href="#contato"
-                  className="inline-flex items-center px-4 py-2 text-[11px] font-medium tracking-[0.14em] uppercase text-[#F2F0EB] bg-[#111111] hover:bg-[#A58A58] hover:text-[#111111] transition-colors duration-150 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#111111]"
+                  className={`inline-flex items-center px-4 py-2 text-[11px] font-medium tracking-[0.14em] uppercase transition-colors duration-200 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A58A58] ${
+                    useDarkHeader
+                      ? 'text-[#111111] bg-[#F2F0EB] hover:bg-[#A58A58]'
+                      : 'text-[#F2F0EB] bg-[#111111] hover:bg-[#A58A58] hover:text-[#111111]'
+                  }`}
                 >
                   Contato
                 </a>
@@ -111,7 +136,11 @@ export function Navbar() {
               onClick={() => setMobileOpen((prev) => !prev)}
               aria-expanded={mobileOpen}
               aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'}
-              className="md:hidden inline-flex items-center justify-center w-11 h-11 text-[#111111] border border-[#111111]/15 hover:border-[#111111]/45 transition-colors focus-visible:outline-2 focus-visible:outline-[#A58A58]"
+              className={`md:hidden inline-flex items-center justify-center w-11 h-11 border transition-colors focus-visible:outline-2 focus-visible:outline-[#A58A58] ${
+                useDarkHeader
+                  ? 'text-[#F2F0EB] border-white/20 hover:border-white/50'
+                  : 'text-[#111111] border-[#111111]/15 hover:border-[#111111]/45'
+              }`}
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -119,7 +148,11 @@ export function Navbar() {
         </div>
 
         {/* Hairline Scroll Progress Line */}
-        <div className="h-[1.5px] w-full bg-[#111111]/[0.05] overflow-hidden">
+        <div
+          className={`h-[1.5px] w-full overflow-hidden ${
+            useDarkHeader ? 'bg-white/[0.08]' : 'bg-[#111111]/[0.05]'
+          }`}
+        >
           <div
             aria-hidden="true"
             className="h-full bg-[#A58A58] origin-left will-change-transform"

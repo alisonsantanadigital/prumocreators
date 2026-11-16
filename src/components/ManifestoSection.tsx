@@ -18,9 +18,16 @@ export function ManifestoSection() {
   return (
     <section
       id="manifesto"
-      className="relative py-28 sm:py-36 lg:py-44 bg-[#F2F0EB] text-[#111111] border-t border-[#111111]/10"
+      className="relative text-[#111111]"
+      style={{
+        background:
+          'linear-gradient(180deg, #11100E 0%, #1F1D1A 5%, #5C574E 12%, #CBC6BC 19%, #F2F0EB 26%, #F2F0EB 100%)',
+      }}
     >
-      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
+      {/* Seamless Tonal Transition Zone from Dark Hero into Warm Mineral Off-White */}
+      <div className="h-24 sm:h-32 w-full pointer-events-none" aria-hidden="true" />
+
+      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 pt-8 pb-28 sm:pb-36 lg:pb-44">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           {/* Magazine-Spread Left Header & Copy */}
           <div className="lg:col-span-7">

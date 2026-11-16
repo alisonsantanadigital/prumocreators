@@ -12,7 +12,7 @@ import { StickyMobileContactBar } from './components/StickyMobileContactBar';
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-[#F2F0EB] text-[#111111]">
+    <div className="min-h-screen prumo-site-canvas text-[#111111]">
       <Navbar />
       <main>
         <HeroSection />

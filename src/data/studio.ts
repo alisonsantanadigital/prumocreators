@@ -1,4 +1,4 @@
-import heroCampaignImg from '../assets/images/hero_fashion_campaign_1794799599677.jpg';
+import heroCampaignImg from '../assets/images/hero_immersive_wide_1794804170810.jpg';
 import heroInsetImg from '../assets/images/hero_detail_inset_1794799599281.jpg';
 import aboutAtelierImg from '../assets/images/about_atelier_fashion_1794799600562.jpg';
 import aboutStudioImg from '../assets/images/about_editorial_studio_1794799600703.jpg';
@@ -33,7 +33,7 @@ export interface PartnerBrand {
 export const STUDIO_MEDIA = {
   heroCampaign: heroCampaignImg,
   heroCampaignAlt:
-    'Campanha editorial de moda em galeria arquitetônica brutalista com alfaiataria em preto e cinza mineral',
+    'Retrato editorial em arquitetura de concreto escuro e travertino iluminado por luz natural direcional',
   /**
    * Vídeo curto, real e sem som para reprodução contínua na abertura (Hero).
    * Preencher somente com arquivo ou URL real e autorizado.

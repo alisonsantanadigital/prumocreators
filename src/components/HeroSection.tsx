@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { ArrowUpRight } from 'lucide-react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
 import { STUDIO_MEDIA } from '../data/studio';
 import { PrumoMark } from './PrumoMark';
@@ -14,178 +15,189 @@ export function HeroSection() {
     offset: ['start start', 'end start'],
   });
 
-  const photoY = useTransform(scrollYProgress, [0, 1], prefersReduced ? [0, 0] : [0, 36]);
+  const mediaY = useTransform(scrollYProgress, [0, 1], prefersReduced ? ['0%', '0%'] : ['0%', '10%']);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.72], [1, prefersReduced ? 1 : 0.15]);
   const hasVideo = Boolean(STUDIO_MEDIA.heroVideo && STUDIO_MEDIA.heroVideo.trim().length > 0);
 
   return (
     <section
       id="hero"
       ref={sectionRef}
-      className="relative min-h-[100svh] w-full flex flex-col justify-between bg-[#F2F0EB] text-[#111111] pt-24 sm:pt-28 pb-8 sm:pb-10 overflow-hidden"
+      className="relative min-h-[100svh] w-full flex flex-col justify-end bg-[#11100E] text-[#F2F0EB] overflow-hidden"
     >
-      <div className="mx-auto w-full max-w-[1440px] px-6 sm:px-10 lg:px-16 flex-1 flex flex-col justify-between">
-        {/* Top Architectural Title & Identity Mark */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          <div className="lg:col-span-7 pt-2 sm:pt-6">
-            <motion.div
-              initial={prefersReduced ? false : { opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="flex items-center gap-4 mb-8 sm:mb-12"
-            >
-              {/* Floating Identity Architectural Plumb Mark */}
-              <motion.div
-                animate={
-                  prefersReduced
-                    ? undefined
-                    : {
-                        y: [0, -5, 0],
-                      }
-                }
-                transition={{
-                  duration: 4.8,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-                className="shrink-0 will-change-transform"
-              >
-                <PrumoMark className="w-6 h-10 text-[#111111]" />
-              </motion.div>
-              <div className="h-px w-10 bg-[#A58A58]" aria-hidden="true" />
-              <span className="text-xs font-medium tracking-[0.22em] uppercase text-[#111111]">
-                PRUMO CREATORS
-              </span>
-            </motion.div>
+      {/* 1. Full-Bleed Protagonist Editorial Media with Cinematic Entrance & Parallax */}
+      <motion.div
+        style={{ y: mediaY }}
+        className="absolute -top-[6%] -bottom-[10%] inset-x-0 pointer-events-none select-none will-change-transform"
+      >
+        {hasVideo ? (
+          <video
+            src={STUDIO_MEDIA.heroVideo}
+            poster={STUDIO_MEDIA.heroCampaign}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover object-[75%_22%] md:object-center"
+          />
+        ) : !imgError ? (
+          <motion.img
+            src={STUDIO_MEDIA.heroCampaign}
+            alt={STUDIO_MEDIA.heroCampaignAlt}
+            referrerPolicy="no-referrer"
+            onError={() => setImgError(true)}
+            initial={prefersReduced ? false : { scale: 1.06, opacity: 0.5 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full h-full object-cover object-[76%_20%] md:object-[72%_25%] will-change-transform"
+          />
+        ) : (
+          <div className="w-full h-full bg-[#161513]" />
+        )}
+      </motion.div>
 
-            <h1 className="font-serif text-[clamp(2.5rem,5.2vw,5rem)] font-normal leading-[1.02] tracking-[-0.025em] text-[#111111] [text-wrap:balance]">
-              <StaggeredText
-                immediate
-                delay={0.08}
-                stagger={0.045}
-                segments={[
-                  { text: '“Construímos presenças digitais que ' },
-                  { text: 'aproximam talentos', italic: true },
-                  { text: ' de grandes oportunidades.”' },
-                ]}
-              />
-            </h1>
+      {/* 2. Atmospheric Depth Layers: Left Editorial Scrim + Ambient Tonal Drift + Seamless Bottom Dissolve */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'linear-gradient(90deg, rgba(14,13,12,0.88) 0%, rgba(14,13,12,0.62) 38%, rgba(14,13,12,0.18) 68%, rgba(14,13,12,0.22) 100%)',
+        }}
+      />
 
-            <motion.div
-              initial={prefersReduced ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-10 sm:mt-14 flex flex-wrap items-center gap-6"
-            >
-              <MagneticButton>
-                <a
-                  href="#portfolio"
-                  className="inline-flex items-center px-6 py-3.5 text-[11px] font-semibold tracking-[0.16em] uppercase text-[#F2F0EB] bg-[#111111] hover:bg-[#A58A58] hover:text-[#111111] transition-colors duration-200 whitespace-nowrap"
-                >
-                  Selected Works
-                </a>
-              </MagneticButton>
+      {/* Mobile-specific bottom legibility veil so text never clashes with lower highlights */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 md:hidden"
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(14,13,12,0.32) 0%, rgba(14,13,12,0.12) 32%, rgba(14,13,12,0.72) 58%, rgba(17,16,14,0.94) 80%, #11100E 100%)',
+        }}
+      />
 
-              <a
-                href="#manifesto"
-                className="text-[11px] font-medium tracking-[0.16em] uppercase text-[#111111] border-b border-[#A58A58] pb-1 hover:text-[#A58A58] transition-colors duration-200 whitespace-nowrap"
-              >
-                Ler Manifesto
-              </a>
-            </motion.div>
-          </div>
+      {/* Subtle Moving Ambient Light Layer */}
+      <div
+        aria-hidden="true"
+        className="prumo-ambient-gradient pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(ellipse 58% 52% at 68% 36%, rgba(165, 138, 88, 0.16) 0%, rgba(165, 138, 88, 0.05) 45%, transparent 75%)',
+        }}
+      />
 
-          {/* Right Column: Large-Scale Editorial Visual + Subtle Floating Architectural Guide */}
+      {/* Progressive Bottom Edge Fade into Continuous Site Background */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[44%]"
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(17,16,14,0) 0%, rgba(17,16,14,0.48) 48%, rgba(17,16,14,0.88) 82%, #11100E 100%)',
+        }}
+      />
+
+      {/* Top Atmospheric Vignette under Fixed Navbar */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-32"
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(14,13,12,0.72) 0%, rgba(14,13,12,0) 100%)',
+        }}
+      />
+
+      {/* 3. Editorial Overlay Composition (Uncluttered Typography + Generous Negative Space) */}
+      <motion.div
+        style={{ opacity: contentOpacity }}
+        className="relative z-10 mx-auto w-full max-w-[1440px] px-6 sm:px-10 lg:px-16 pt-28 sm:pt-32 pb-8 sm:pb-12 lg:pb-14"
+      >
+        <div className="max-w-2xl">
           <motion.div
-            style={{ y: photoY }}
-            initial={prefersReduced ? false : { opacity: 0, y: 20 }}
+            initial={prefersReduced ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
-            className="relative lg:col-span-5 lg:pt-4"
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="flex items-center gap-3.5 mb-6 sm:mb-8"
           >
-            {/* Floating geometric plumb thread coherent with brand identity */}
             <motion.div
-              aria-hidden="true"
-              animate={
-                prefersReduced
-                  ? undefined
-                  : {
-                      y: [0, 8, 0],
-                    }
-              }
-              transition={{
-                duration: 5.5,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className="hidden lg:flex flex-col items-center absolute -left-7 top-10 pointer-events-none select-none"
+              animate={prefersReduced ? undefined : { y: [0, -4, 0] }}
+              transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut' }}
+              className="shrink-0 will-change-transform"
             >
-              <span className="w-px h-14 bg-[#A58A58]/70" />
-              <span className="w-2 h-2 rotate-45 border border-[#A58A58] bg-[#F2F0EB]" />
+              <PrumoMark className="w-5 h-8 text-[#F2F0EB]" />
             </motion.div>
+            <div className="h-px w-8 bg-[#A58A58]" aria-hidden="true" />
+            <span className="text-[11px] font-medium tracking-[0.24em] uppercase text-[#F2F0EB]/90">
+              PRUMO CREATORS
+            </span>
+          </motion.div>
 
-            <div className="relative aspect-[4/5] sm:aspect-[16/11] lg:aspect-[4/5] overflow-hidden bg-[#E5E2DC]">
-              {hasVideo ? (
-                <video
-                  src={STUDIO_MEDIA.heroVideo}
-                  poster={STUDIO_MEDIA.heroCampaign}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="w-full h-full object-cover"
-                />
-              ) : !imgError ? (
-                <motion.img
-                  src={STUDIO_MEDIA.heroCampaign}
-                  alt={STUDIO_MEDIA.heroCampaignAlt}
-                  referrerPolicy="no-referrer"
-                  onError={() => setImgError(true)}
-                  initial={prefersReduced ? false : { scale: 1.05 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-                  className="w-full h-full object-cover will-change-transform"
-                />
-              ) : (
-                <div className="w-full h-full bg-[#E5E2DC]" />
-              )}
-            </div>
-            <div className="mt-3 flex items-center justify-between text-[11px] tracking-[0.14em] uppercase text-[#A7A49E]">
-              <span>Creative Architecture</span>
-              <span className="tabular-nums text-[#A58A58]">01</span>
-            </div>
+          <h1 className="font-serif text-[clamp(2.4rem,5.2vw,5.1rem)] font-normal leading-[1.01] tracking-[-0.025em] text-[#F2F0EB] [text-wrap:balance]">
+            <StaggeredText
+              immediate
+              delay={0.04}
+              stagger={0.035}
+              segments={[
+                { text: 'Conectamos ' },
+                { text: 'criadores,', italic: true },
+                { text: ' marcas e oportunidades.' },
+              ]}
+            />
+          </h1>
+
+          <motion.p
+            initial={prefersReduced ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.48, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-5 sm:mt-6 text-sm sm:text-base leading-relaxed text-[#D8D4CC] max-w-md"
+          >
+            Experiências digitais e apresentações comerciais sob medida.
+          </motion.p>
+
+          <motion.div
+            initial={prefersReduced ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.48, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-8 sm:mt-10 flex flex-wrap items-center gap-6"
+          >
+            <MagneticButton>
+              <a
+                href="#portfolio"
+                className="inline-flex items-center gap-2.5 px-6 py-3.5 text-[11px] font-semibold tracking-[0.16em] uppercase text-[#111111] bg-[#F2F0EB] hover:bg-[#A58A58] transition-colors duration-200 whitespace-nowrap"
+              >
+                <span>Explorar projetos</span>
+                <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+              </a>
+            </MagneticButton>
+
+            <a
+              href="#contato"
+              className="text-[11px] font-medium tracking-[0.16em] uppercase text-[#F2F0EB] border-b border-[#A58A58] pb-1 hover:text-[#A58A58] transition-colors duration-200 whitespace-nowrap"
+            >
+              Iniciar parceria
+            </a>
           </motion.div>
         </div>
 
-        {/* Discrete Scroll Indicator with Vertical Floating Plumb Thread */}
-        <div className="mt-12 pt-5 border-t border-[#111111]/10 flex items-center justify-between gap-4">
+        {/* Minimalist Bottom Scroll Indicator */}
+        <div className="mt-12 sm:mt-16 pt-5 border-t border-white/12 flex items-center justify-between gap-4">
           <span className="text-[11px] tracking-[0.16em] uppercase text-[#A7A49E]">
             Direção de Arte · Estratégia · Experiências Digitais
           </span>
 
           <a
             href="#manifesto"
-            className="inline-flex items-center gap-3 text-[11px] tracking-[0.16em] uppercase text-[#111111] hover:text-[#A58A58] transition-colors whitespace-nowrap"
+            className="inline-flex items-center gap-3 text-[11px] tracking-[0.16em] uppercase text-[#F2F0EB]/85 hover:text-[#A58A58] transition-colors whitespace-nowrap"
           >
             <span>Role para explorar</span>
             <motion.span
               aria-hidden="true"
-              animate={
-                prefersReduced
-                  ? undefined
-                  : {
-                      y: [0, 4, 0],
-                    }
-              }
-              transition={{
-                duration: 2.6,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
+              animate={prefersReduced ? undefined : { y: [0, 4, 0] }}
+              transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
               className="block w-px h-5 bg-[#A58A58]"
             />
           </a>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

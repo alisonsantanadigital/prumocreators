@@ -8,7 +8,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    background-color: #f2f0eb;
+    background-color: #141311;
     color: #111111;
     font-family: var(--font-sans);
   }
@@ -21,7 +21,7 @@
 
   body {
     overflow-x: hidden;
-    background-color: #f2f0eb;
+    background-color: #141311;
     color: #111111;
   }
 }
@@ -37,6 +37,40 @@
 
 .editorial-scroll-track::-webkit-scrollbar {
   display: none;
+}
+
+/* Fundo contínuo estendido por todo o site, conectando a Hero escura às seções claras e ao bloco editorial escuro */
+.prumo-site-canvas {
+  background: linear-gradient(
+    180deg,
+    #11100e 0%,
+    #171613 10%,
+    #312e29 17%,
+    #c9c4ba 23%,
+    #f2f0eb 28%,
+    #f2f0eb 46%,
+    #111111 54%,
+    #111111 66%,
+    #f2f0eb 72%,
+    #f2f0eb 86%,
+    #111111 93%,
+    #111111 100%
+  );
+}
+
+/* Camada sutil de luz ambiental em movimento contínuo na Hero */
+@keyframes prumo-gradient-drift {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.prumo-ambient-gradient {
+  animation: prumo-gradient-drift 12s ease-in-out infinite;
 }
 
 @keyframes prumo-cta-glow {
@@ -73,10 +107,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .prumo-cta-glow {
-    animation: none;
-  }
-
+  .prumo-ambient-gradient,
+  .prumo-cta-glow,
   .prumo-marquee-track {
     animation: none;
   }
