@@ -1,18 +1,11 @@
-import heroCampaignImg from '../assets/images/brazil_hero_studio_1794805121857.jpg';
-import aboutAtelierImg from '../assets/images/brazil_manifesto_atelier_1794805123072.jpg';
-import visionSpreadImg from '../assets/images/brazil_vision_horizon_1794805125799.jpg';
-import practiceCreatorProImg from '../assets/images/brazil_practice_creator_pro_1794805123507.jpg';
-import practiceCreatorExperienceImg from '../assets/images/brazil_practice_creator_experience_1794805124298.jpg';
-import practiceDigitalIdentityImg from '../assets/images/brazil_practice_digital_identity_1794805124677.jpg';
-import practiceCustomExperiencesImg from '../assets/images/brazil_practice_custom_experiences_1794805125846.jpg';
+import heroCampaignImg from '../assets/images/brazil_simple_hero_phone_1794805787447.jpg';
+import aboutAtelierImg from '../assets/images/brazil_simple_desk_clean_1794805810191.jpg';
+import visionSpreadImg from '../assets/images/brazil_simple_horizon_phone_1794805789596.jpg';
 
-export interface PracticeArea {
+export interface ProjectTypeOption {
   id: string;
   index: string;
   title: string;
-  description: string;
-  image: string;
-  imageAlt: string;
 }
 
 export interface ProcessStep {
@@ -31,7 +24,7 @@ export interface PartnerBrand {
 export const STUDIO_MEDIA = {
   heroCampaign: heroCampaignImg,
   heroCampaignAlt:
-    'Estúdio de arquitetura modernista brasileira vazio em São Paulo ao entardecer, com concreto aparente escuro, câmera de cinema em tripé, palmeiras e horizonte dourado',
+    'Mesa simples de trabalho no Brasil com celular em tripé compacto e xícara de café ao lado de janela com prédios ao fundo, sem pessoas',
   /**
    * Vídeo curto, real e sem som para reprodução contínua na abertura (Hero).
    * Preencher somente com arquivo ou URL real e autorizado.
@@ -39,10 +32,20 @@ export const STUDIO_MEDIA = {
   heroVideo: '' as string,
   manifestoAtelier: aboutAtelierImg,
   manifestoAtelierAlt:
-    'Ateliê de arquitetura modernista brasileira sem pessoas, com mesa em jacarandá, câmera, papéis artesanais, cobogós e folhagem de costela-de-adão sob luz natural',
+    'Mesa de madeira simples em apartamento brasileiro iluminado por luz natural, com smartphone, caderno aberto, caneta, planta e xícara de café, sem pessoas',
   visionSpread: visionSpreadImg,
   visionSpreadAlt:
-    'Terraço modernista brasileiro vazio em concreto e travertino com espelho d’água voltado para as montanhas e baía do Rio de Janeiro ao pôr do sol',
+    'Mesa em varanda brasileira simples com smartphone e xícara de café voltada para a paisagem urbana ao pôr do sol, sem pessoas',
+};
+
+export const FOUNDER_PROFILE = {
+  photo: '/assets/aistudio/Gemini_Generated_Image_ru5r43ru5r43ru5r_55c09408.jpg',
+  photoAlt: "Foto de Alison Sant'Ana, fundador da Prumo Creators",
+  eyebrow: '05 — Fundador',
+  name: "Alison Sant'Ana",
+  subtitle: 'Trabalho direto ao lado de quem cria.',
+  role: "Alison Sant'Ana · Fundador, Prumo Creators",
+  bio: 'À frente da Prumo Creators, trabalho diretamente com influenciadores e criadores para transformar sua rotina nas redes em páginas profissionais e apresentações prontas para marcas e parceiros. O foco é direto: visual limpo, mensagem objetiva e projetos reais feitos para abrir portas.',
 };
 
 /**
@@ -51,63 +54,47 @@ export const STUDIO_MEDIA = {
  */
 export const PARTNER_BRANDS: PartnerBrand[] = [];
 
-export const PRACTICE_AREAS: PracticeArea[] = [
+export const PROJECT_TYPES: ProjectTypeOption[] = [
   {
     id: 'creator-pro',
     index: '01',
     title: 'CREATOR PRO',
-    description: 'Apresentações digitais profissionais para influenciadores.',
-    image: practiceCreatorProImg,
-    imageAlt:
-      'Sala de estúdio brasileira vazia em luz natural com poltrona em freijó e couro, microfone de estúdio e lente de cinema sobre bloco de travertino diante de cobogós',
   },
   {
     id: 'creator-pro-experience',
     index: '02',
     title: 'CREATOR PRO EXPERIENCE',
-    description:
-      'Experiências digitais personalizadas, com direção de arte e identidade própria.',
-    image: practiceCreatorExperienceImg,
-    imageAlt:
-      'Set de produção vazio em pavilhão curvo de arquitetura modernista brasileira em concreto branco e travertino, com câmera de cinema e monitor de referência',
   },
   {
-    id: 'digital-identity',
+    id: 'apresentacao-comercial',
     index: '03',
-    title: 'DIGITAL IDENTITY',
-    description: 'Desenvolvimento de posicionamento e identidade digital.',
-    image: practiceDigitalIdentityImg,
-    imageAlt:
-      'Mesa de direção em travertino e madeira freijó sob sombras de cobogós com papéis de algodão, amostras minerais, tablet com grade geométrica e xícara de cafezinho',
+    title: 'APRESENTAÇÃO COMERCIAL',
   },
   {
-    id: 'custom-experiences',
+    id: 'projeto-sob-medida',
     index: '04',
-    title: 'CUSTOM EXPERIENCES',
-    description: 'Projetos digitais personalizados para talentos e marcas.',
-    image: practiceCustomExperiencesImg,
-    imageAlt:
-      'Pavilhão contemporâneo brasileiro vazio com forro de madeira ripada, mesa monolítica de travertino, espelho d’água e jardim tropical nativo',
+    title: 'PROJETO SOB MEDIDA',
   },
 ];
 
 export const PROCESS_STEPS: ProcessStep[] = [
   {
     index: '01',
-    title: 'IDENTIDADE',
-    description: 'Entendemos o universo, a personalidade e o posicionamento do creator.',
+    title: 'ALINHAMENTO',
+    description:
+      'Entendemos seu nicho, seu público e o que marcas e parceiros precisam enxergar logo no primeiro acesso.',
   },
   {
     index: '02',
-    title: 'CONSTRUÇÃO',
+    title: 'CRIAÇÃO',
     description:
-      'Desenvolvemos uma experiência digital alinhada à sua identidade e aos seus objetivos comerciais.',
+      'Estruturamos sua página e apresentação comercial com visual profissional, direto ao ponto e fiel ao seu estilo.',
   },
   {
     index: '03',
-    title: 'APRESENTAÇÃO',
+    title: 'PUBLICAÇÃO',
     description:
-      'Entregamos uma presença digital profissional, preparada para apresentar oportunidades a marcas.',
+      'Entregamos o projeto no ar, pronto para compartilhar na bio, enviar em propostas e fechar novos trabalhos.',
   },
 ];
 

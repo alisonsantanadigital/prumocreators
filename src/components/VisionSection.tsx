@@ -25,15 +25,15 @@ export function VisionSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           <div className="lg:col-span-5">
             <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-[#A58A58] mb-6">
-              05 — Nossa Visão
+              03 — Visão
             </p>
 
             <h2 className="font-serif text-[clamp(2.3rem,4.3vw,4rem)] font-normal leading-[1.03] tracking-[-0.025em] text-[#111111] [text-wrap:balance]">
               <StaggeredText
                 stagger={0.045}
                 segments={[
-                  { text: 'Não basta estar presente. ' },
-                  { text: 'É preciso ser percebido.', italic: true },
+                  { text: 'Não basta estar nas redes. ' },
+                  { text: 'É preciso saber se apresentar.', italic: true },
                 ]}
               />
             </h2>
@@ -49,14 +49,12 @@ export function VisionSection() {
               />
             </div>
             <p className="text-base sm:text-xl leading-[1.75] text-[#2A2927]">
-              Uma apresentação profissional transforma a maneira como marcas percebem, avaliam e
-              se conectam com um criador de conteúdo.
+              Quando uma marca avalia um criador, a apresentação define o valor da parceria.
             </p>
             <p className="text-sm sm:text-base leading-[1.8] text-[#5C5A55]">
-              Antes de qualquer conversa comercial, a forma como identidade, território criativo e
-              repertório são apresentados define o patamar de valor atribuído ao talento. Quando o
-              ambiente digital reflete rigor e personalidade, o diálogo com o mercado acontece em
-              outro nível.
+              Uma página clara e bem organizada mostra em segundos seu estilo, sua audiência e o
+              profissionalismo do seu trabalho — facilitando negociações e abrindo novas
+              oportunidades comerciais.
             </p>
           </div>
         </div>
@@ -86,9 +84,9 @@ export function VisionSection() {
               )}
             </div>
             <div className="mt-3 flex items-center justify-between text-[11px] tracking-[0.14em] uppercase text-[#A7A49E]">
-              <span>Percepção · Valor · Conexão</span>
+              <span>Presença · Clareza · Negócios</span>
               <span className="tabular-nums text-[#A58A58]">
-                <AnimatedCounter value={5} padLength={2} duration={650} />
+                <AnimatedCounter value={3} padLength={2} duration={650} />
               </span>
             </div>
           </div>

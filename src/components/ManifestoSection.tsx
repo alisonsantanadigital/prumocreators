@@ -32,15 +32,15 @@ export function ManifestoSection() {
           {/* Magazine-Spread Left Header & Copy */}
           <div className="lg:col-span-7">
             <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-[#A58A58] mb-6">
-              02 — Manifesto
+              01 — Propósito
             </p>
 
             <h2 className="font-serif text-[clamp(2.4rem,4.5vw,4.25rem)] font-normal leading-[1.03] tracking-[-0.025em] text-[#111111] [text-wrap:balance]">
               <StaggeredText
                 stagger={0.05}
                 segments={[
-                  { text: 'Talento merece uma ' },
-                  { text: 'apresentação à altura.', italic: true },
+                  { text: 'Quem cria conteúdo precisa ser visto com ' },
+                  { text: 'profissionalismo.', italic: true },
                 ]}
               />
             </h2>
@@ -55,14 +55,14 @@ export function ManifestoSection() {
                 />
               </div>
               <p className="text-base sm:text-xl leading-[1.75] text-[#2A2927]">
-                A PRUMO CREATORS desenvolve experiências digitais e apresentações comerciais para
-                criadores de conteúdo. Transformamos identidade, influência e posicionamento em
-                ferramentas profissionais de conexão com marcas.
+                A PRUMO CREATORS cria páginas e apresentações comerciais sob medida para
+                influenciadores. Organizamos seu perfil, entregas e resultados em um só link,
+                pronto para apresentar a marcas e fechar novas parcerias.
               </p>
             </div>
           </div>
 
-          {/* Right Offset Vertical Atelier Photography */}
+          {/* Right Offset Vertical Studio Photography */}
           <div ref={plateRef} className="lg:col-span-5 lg:pt-12">
             <div className="aspect-[3/4] overflow-hidden bg-[#E5E2DC]">
               {!imgError ? (
@@ -86,7 +86,7 @@ export function ManifestoSection() {
               )}
             </div>
             <p className="mt-3 text-[11px] tracking-[0.14em] uppercase text-[#A7A49E]">
-              Identidade · Influência · Posicionamento
+              Clareza · Posicionamento · Resultados
             </p>
           </div>
         </div>

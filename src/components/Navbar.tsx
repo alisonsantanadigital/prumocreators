@@ -5,10 +5,11 @@ import { PrumoMark } from './PrumoMark';
 import { MagneticButton } from './motion/MotionPrimitives';
 
 const NAV_ITEMS = [
-  { label: 'Manifesto', href: '#manifesto' },
-  { label: 'Atuação', href: '#atuacao' },
-  { label: 'Selected Works', href: '#portfolio' },
+  { label: 'Propósito', href: '#manifesto' },
+  { label: 'Projetos', href: '#portfolio' },
+  { label: 'Visão', href: '#visao' },
   { label: 'Processo', href: '#processo' },
+  { label: 'Fundador', href: '#fundador' },
 ];
 
 export function Navbar() {
@@ -28,7 +29,7 @@ export function Navbar() {
       const heroThreshold = heroEl ? heroEl.offsetHeight * 0.72 : 540;
       setOverHero(scrollTop < heroThreshold);
 
-      const sections = ['manifesto', 'atuacao', 'portfolio', 'visao', 'processo', 'contato'];
+      const sections = ['manifesto', 'portfolio', 'visao', 'processo', 'fundador', 'contato'];
       let current = '';
       for (const id of sections) {
         const el = document.getElementById(id);
@@ -71,12 +72,13 @@ export function Navbar() {
         }`}
       >
         <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 h-16 flex items-center justify-between gap-8">
-          {/* Zone 1: Brand Wordmark */}
+          {/* Zone 1: Brand Logo + Wordmark */}
           <a
             href="#hero"
-            className="text-xs sm:text-sm font-semibold tracking-[0.22em] whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A58A58]"
+            className="inline-flex items-center gap-3 text-xs sm:text-sm font-semibold tracking-[0.22em] whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A58A58]"
           >
-            PRUMO CREATORS
+            <PrumoMark className="w-5 h-5 shrink-0" />
+            <span>PRUMO CREATORS</span>
           </a>
 
           {/* Zone 2: Minimalist Single-Line Navigation Links */}
@@ -189,9 +191,9 @@ export function Navbar() {
 
             <div className="pt-6 border-t border-[#111111]/10 flex items-center justify-between">
               <span className="text-[11px] tracking-[0.16em] uppercase text-[#A7A49E]">
-                Creative Architecture
+                Sites para Criadores · Brasil
               </span>
-              <PrumoMark className="w-5 h-8 text-[#111111]" />
+              <PrumoMark className="w-6 h-6 text-[#111111]" />
             </div>
           </motion.div>
         )}

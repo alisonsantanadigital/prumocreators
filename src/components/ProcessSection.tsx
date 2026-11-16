@@ -15,21 +15,21 @@ export function ProcessSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end pb-14 border-b border-[#111111]/12">
           <div className="lg:col-span-7">
             <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-[#A58A58] mb-5">
-              06 — Processo
+              04 — Processo
             </p>
             <h2 className="font-serif text-[clamp(2.2rem,4vw,3.75rem)] font-normal leading-[1.05] tracking-[-0.02em] text-[#111111] [text-wrap:balance]">
               <StaggeredText
                 stagger={0.045}
                 segments={[
-                  { text: 'Três etapas da identidade à ' },
-                  { text: 'apresentação final.', italic: true },
+                  { text: 'Do alinhamento ao projeto no ar, ' },
+                  { text: 'sem complicação.', italic: true },
                 ]}
               />
             </h2>
           </div>
           <div className="lg:col-span-5 lg:text-right">
             <span className="text-[11px] tracking-[0.16em] uppercase text-[#A7A49E]">
-              Método de Estúdio
+              Entrega Direta
             </span>
           </div>
         </div>

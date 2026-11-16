@@ -451,18 +451,18 @@ export function PortfolioSection() {
       className="relative py-20 sm:py-28 lg:py-32 bg-[#111111] text-[#F2F0EB] overflow-x-clip"
     >
       <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
-        {/* Abertura Editorial */}
+        {/* Abertura Editorial — Destaque Principal dos Projetos Criados */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-end pb-9 border-b border-white/12">
           <div className="lg:col-span-7">
             <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-[#A58A58] mb-4">
-              Projetos / Creator Experiences
+              02 — Projetos Criados
             </p>
-            <h2 className="font-serif text-[clamp(2rem,3.8vw,3.6rem)] font-normal leading-[1.04] tracking-[-0.02em] text-[#F2F0EB] [text-wrap:balance]">
+            <h2 className="font-serif text-[clamp(2.15rem,4vw,3.8rem)] font-normal leading-[1.04] tracking-[-0.02em] text-[#F2F0EB] [text-wrap:balance]">
               <StaggeredText
                 stagger={0.045}
                 segments={[
-                  { text: 'Projetos que traduzem influência em ' },
-                  { text: 'presença digital.', italic: true },
+                  { text: 'Projetos desenvolvidos para ' },
+                  { text: 'criadores reais.', italic: true },
                 ]}
               />
             </h2>
@@ -470,8 +470,8 @@ export function PortfolioSection() {
 
           <div className="lg:col-span-5">
             <p className="text-sm sm:text-base leading-relaxed text-[#A7A49E] max-w-md lg:ml-auto">
-              Cada projeto representa uma identidade digital desenvolvida sob medida para o perfil,
-              o território criativo e os objetivos de um criador.
+              Este é o centro do nosso trabalho: sites e apresentações prontos para cada perfil.
+              Navegue pelas cartas, amplie a tela ou abra os projetos publicados.
             </p>
           </div>
         </div>
@@ -761,8 +761,8 @@ export function PortfolioSection() {
         {/* Encerramento Comercial da Seção */}
         <div className="mt-16 sm:mt-20 pt-10 border-t border-white/12 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <h3 className="font-serif text-2xl sm:text-4xl font-normal text-[#F2F0EB]">
-            Seu próximo projeto pode{' '}
-            <span className="italic text-[#A58A58]">começar aqui.</span>
+            Quer um projeto nesse nível{' '}
+            <span className="italic text-[#A58A58]">com a sua cara?</span>
           </h3>
 
           <MagneticButton>
@@ -770,7 +770,7 @@ export function PortfolioSection() {
               href="#contato"
               className="inline-flex items-center gap-3 px-6 py-3.5 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#111111] bg-[#F2F0EB] hover:bg-[#A58A58] transition-colors duration-150 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A58A58]"
             >
-              <span>Desenvolver minha presença digital</span>
+              <span>Quero meu projeto</span>
               <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
             </a>
           </MagneticButton>

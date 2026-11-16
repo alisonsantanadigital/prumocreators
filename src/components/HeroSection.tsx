@@ -49,7 +49,7 @@ export function HeroSection() {
             initial={prefersReduced ? false : { scale: 1.06, opacity: 0.5 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full h-full object-cover object-[76%_center] md:object-[80%_center] will-change-transform"
+            className="w-full h-full object-cover object-[70%_center] md:object-[78%_center] will-change-transform"
           />
         ) : (
           <div className="w-full h-full bg-[#161513]" />
@@ -123,7 +123,7 @@ export function HeroSection() {
               transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut' }}
               className="shrink-0 will-change-transform"
             >
-              <PrumoMark className="w-5 h-8 text-[#F2F0EB]" />
+              <PrumoMark className="w-6 h-6 text-[#F2F0EB]" />
             </motion.div>
             <div className="h-px w-8 bg-[#A58A58]" aria-hidden="true" />
             <span className="text-[11px] font-medium tracking-[0.24em] uppercase text-[#F2F0EB]/90">
@@ -150,7 +150,7 @@ export function HeroSection() {
             transition={{ duration: 0.48, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
             className="mt-5 sm:mt-6 text-sm sm:text-base leading-relaxed text-[#D8D4CC] max-w-md"
           >
-            Experiências digitais e apresentações comerciais sob medida.
+            Sites e apresentações profissionais para criadores mostrarem seu valor às marcas.
           </motion.p>
 
           <motion.div
@@ -164,7 +164,7 @@ export function HeroSection() {
                 href="#portfolio"
                 className="inline-flex items-center gap-2.5 px-6 py-3.5 text-[11px] font-semibold tracking-[0.16em] uppercase text-[#111111] bg-[#F2F0EB] hover:bg-[#A58A58] transition-colors duration-200 whitespace-nowrap"
               >
-                <span>Explorar projetos</span>
+                <span>Ver projetos criados</span>
                 <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
               </a>
             </MagneticButton>
@@ -173,7 +173,7 @@ export function HeroSection() {
               href="#contato"
               className="text-[11px] font-medium tracking-[0.16em] uppercase text-[#F2F0EB] border-b border-[#A58A58] pb-1 hover:text-[#A58A58] transition-colors duration-200 whitespace-nowrap"
             >
-              Iniciar parceria
+              Iniciar projeto
             </a>
           </motion.div>
         </div>
@@ -181,7 +181,7 @@ export function HeroSection() {
         {/* Minimalist Bottom Scroll Indicator */}
         <div className="mt-12 sm:mt-16 pt-5 border-t border-white/12 flex items-center justify-between gap-4">
           <span className="text-[11px] tracking-[0.16em] uppercase text-[#A7A49E]">
-            Direção de Arte · Estratégia · Experiências Digitais
+            Sites para Criadores · Mídia Kits · Apresentações Comerciais
           </span>
 
           <a

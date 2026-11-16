@@ -1,12 +1,12 @@
 import { useState, type FormEvent } from 'react';
 import { ArrowUpRight, Check, Mail, MessageSquare } from 'lucide-react';
-import { OFFICIAL_CONTACT_CONFIG, PRACTICE_AREAS } from '../data/studio';
+import { OFFICIAL_CONTACT_CONFIG, PROJECT_TYPES } from '../data/studio';
 import { MagneticButton, StaggeredText } from './motion/MotionPrimitives';
 
 export function ContactSection() {
   const [name, setName] = useState('');
   const [channel, setChannel] = useState('');
-  const [interest, setInterest] = useState(PRACTICE_AREAS[0].title);
+  const [interest, setInterest] = useState(PROJECT_TYPES[0].title);
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
@@ -50,21 +50,21 @@ export function ContactSection() {
           {/* Left: Editorial Invitation & Direct Channels */}
           <div className="lg:col-span-6">
             <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-[#A58A58] mb-6">
-              07 — Contato
+              06 — Contato
             </p>
 
             <h2 className="font-serif text-[clamp(2.4rem,4.5vw,4.25rem)] font-normal leading-[1.03] tracking-[-0.025em] text-[#F2F0EB] [text-wrap:balance]">
               <StaggeredText
                 stagger={0.045}
                 segments={[
-                  { text: 'Vamos construir sua ' },
-                  { text: 'próxima presença digital?', italic: true },
+                  { text: 'Vamos colocar o seu ' },
+                  { text: 'projeto no ar?', italic: true },
                 ]}
               />
             </h2>
 
             <p className="mt-6 text-base sm:text-xl leading-relaxed text-[#A7A49E] max-w-lg">
-              Seu trabalho merece uma apresentação profissional.
+              Conte rapidamente o que você precisa para apresentarmos sua proposta.
             </p>
 
             {/* WhatsApp & E-mail Channel Blocks (Centralized Config) */}
@@ -210,10 +210,10 @@ export function ContactSection() {
 
                   <div>
                     <span className="block text-[11px] font-medium tracking-[0.12em] uppercase text-[#A7A49E] mb-3">
-                      Área de Interesse
+                      Tipo de Projeto
                     </span>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                      {PRACTICE_AREAS.map((area) => (
+                      {PROJECT_TYPES.map((area) => (
                         <button
                           key={area.id}
                           type="button"
