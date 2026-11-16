@@ -34,6 +34,78 @@ const STACK_OFFSETS = [
   { x: -16, y: 14, scale: 0.91, rotate: -2.0, opacity: 0.36, zIndex: 5 },
 ];
 
+function LiveSitePreview({
+  url,
+  title,
+  fallbackImage,
+  fallbackAlt,
+  isFront,
+}: {
+  url: string;
+  title: string;
+  fallbackImage: string | null;
+  fallbackAlt: string;
+  isFront: boolean;
+}) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [scale, setScale] = useState(0.5);
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+  const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    setIframeLoaded(false);
+  }, [url]);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const updateScale = () => {
+      const w = el.clientWidth;
+      if (w > 0) setScale(w / 1440);
+    };
+    updateScale();
+    const observer = new ResizeObserver(updateScale);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={containerRef} className="relative w-full h-full overflow-hidden bg-[#0D0D0D]">
+      {fallbackImage && !imgError && (
+        <img
+          src={fallbackImage}
+          alt={fallbackAlt}
+          referrerPolicy="no-referrer"
+          draggable={false}
+          onError={() => setImgError(true)}
+          className={`w-full h-full object-cover object-top select-none transition-transform duration-500 ${
+            isFront ? 'group-hover/media:scale-[1.015]' : ''
+          }`}
+        />
+      )}
+
+      {isFront && (
+        <iframe
+          src={url}
+          title={`Prévia automática ao vivo de ${title}`}
+          loading="lazy"
+          tabIndex={-1}
+          onLoad={() => setIframeLoaded(true)}
+          style={{
+            width: 1440,
+            height: 900,
+            transform: `scale(${scale})`,
+            transformOrigin: 'top left',
+          }}
+          className={`pointer-events-none select-none absolute top-0 left-0 border-0 bg-white transition-opacity duration-500 ${
+            iframeLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+      )}
+    </div>
+  );
+}
+
 function DeckCardContent({
   project,
   isFront,
@@ -76,9 +148,17 @@ function DeckCardContent({
           : 'border border-white/15 shadow-[0_18px_45px_rgba(0,0,0,0.55)]'
       }`}
     >
-      {/* Main Area: Real Hero Section Screenshot (+ optional real video hover preview & Lightbox trigger) */}
+      {/* Main Area: Automatic Live Site Preview (when published) + Fallback Screenshot */}
       <div className="relative w-full aspect-[16/10] bg-[#0D0D0D] border-b border-white/10 overflow-hidden group/media">
-        {hasScreenshot ? (
+        {hasLiveUrl ? (
+          <LiveSitePreview
+            url={project.url}
+            title={project.name}
+            fallbackImage={project.heroScreenshot}
+            fallbackAlt={project.screenshotAlt}
+            isFront={isFront}
+          />
+        ) : hasScreenshot ? (
           <img
             src={project.heroScreenshot!}
             alt={project.screenshotAlt}
@@ -262,9 +342,17 @@ function ProjectLightbox({
           </button>
         </div>
 
-        {/* Enlarged Visual Stage */}
+        {/* Enlarged Live Interactive Stage */}
         <div className="relative flex-1 min-h-0 bg-[#0D0D0D] overflow-auto flex items-center justify-center p-3 sm:p-6">
-          {project.heroScreenshot ? (
+          {hasLiveUrl ? (
+            <div className="w-full h-[64vh] bg-white overflow-hidden">
+              <iframe
+                src={project.url}
+                title={`Visualização ao vivo de ${project.name}`}
+                className="w-full h-full border-0 bg-white"
+              />
+            </div>
+          ) : project.heroScreenshot ? (
             <img
               src={project.heroScreenshot}
               alt={project.screenshotAlt}
