@@ -1,0 +1,6 @@
+{
+  "name": "PRUMO CREATORS",
+  "description": "Estúdio digital especializado em apresentações comerciais, posicionamento e experiências digitais personalizadas para creators.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
