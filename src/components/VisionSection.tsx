@@ -1,0 +1,66 @@
+import { useState } from 'react';
+import { STUDIO_MEDIA } from '../data/studio';
+
+export function VisionSection() {
+  const [imgError, setImgError] = useState(false);
+
+  return (
+    <section
+      id="visao"
+      className="relative py-28 sm:py-36 lg:py-44 bg-[#F2F0EB] text-[#111111]"
+    >
+      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          <div className="lg:col-span-5">
+            <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-[#A58A58] mb-6">
+              05 — Nossa Visão
+            </p>
+
+            <h2 className="font-serif text-[clamp(2.3rem,4.3vw,4rem)] font-normal leading-[1.03] tracking-[-0.025em] text-[#111111] [text-wrap:balance]">
+              Não basta estar presente.{' '}
+              <span className="italic">É preciso ser percebido.</span>
+            </h2>
+          </div>
+
+          <div className="lg:col-span-6 lg:col-start-7 lg:pt-10 space-y-6">
+            <div className="w-12 h-px bg-[#A58A58]" aria-hidden="true" />
+            <p className="text-base sm:text-xl leading-[1.75] text-[#2A2927]">
+              Uma apresentação profissional transforma a maneira como marcas percebem, avaliam e
+              se conectam com um criador de conteúdo.
+            </p>
+            <p className="text-sm sm:text-base leading-[1.8] text-[#5C5A55]">
+              Antes de qualquer conversa comercial, a forma como identidade, território criativo e
+              repertório são apresentados define o patamar de valor atribuído ao talento. Quando o
+              ambiente digital reflete rigor e personalidade, o diálogo com o mercado acontece em
+              outro nível.
+            </p>
+          </div>
+        </div>
+
+        {/* Large-Scale Asymmetric Editorial Photograph */}
+        <div className="mt-16 sm:mt-20 grid grid-cols-1 lg:grid-cols-12">
+          <div className="lg:col-span-10 lg:col-start-3">
+            <div className="aspect-[16/9] overflow-hidden bg-[#E5E2DC]">
+              {!imgError ? (
+                <img
+                  src={STUDIO_MEDIA.visionSpread}
+                  alt={STUDIO_MEDIA.visionSpreadAlt}
+                  referrerPolicy="no-referrer"
+                  loading="lazy"
+                  onError={() => setImgError(true)}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-[#E5E2DC]" />
+              )}
+            </div>
+            <div className="mt-3 flex items-center justify-between text-[11px] tracking-[0.14em] uppercase text-[#A7A49E]">
+              <span>Percepção · Valor · Conexão</span>
+              <span className="tabular-nums text-[#A58A58]">05</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

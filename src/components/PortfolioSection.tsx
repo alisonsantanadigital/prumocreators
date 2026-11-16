@@ -10,9 +10,9 @@ import {
 } from '../data/portfolio';
 
 type FilterState = 'all' | CollectionId;
-type LayoutMode = 'horizontal' | 'grid';
+type LayoutMode = 'horizontal' | 'editorial';
 
-function ProjectCard({
+function ProjectEntry({
   project,
   idx,
   layoutMode,
@@ -23,25 +23,25 @@ function ProjectCard({
 }) {
   const [imgError, setImgError] = useState(false);
   const hasLiveUrl = Boolean(project.url && project.url.trim().length > 0);
-  const isTallCrop = layoutMode === 'horizontal' && idx % 2 === 1;
+  const isAlternatingTall = layoutMode === 'horizontal' && idx % 2 === 1;
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.55, delay: (idx % 4) * 0.06, ease: [0.16, 1, 0.3, 1] }}
-      className={`group flex flex-col justify-between bg-[#0A0A0A] border border-white/10 hover:border-white/35 transition-colors duration-200 ${
+      transition={{ duration: 0.6, delay: (idx % 4) * 0.06, ease: [0.16, 1, 0.3, 1] }}
+      className={`group flex flex-col justify-between ${
         layoutMode === 'horizontal'
           ? 'snap-start shrink-0 w-[82vw] sm:w-[46vw] lg:w-[34vw] xl:w-[29vw]'
           : 'w-full'
       }`}
     >
       <div>
-        {/* Editorial Photography Crop */}
+        {/* Presentation Image */}
         <div
-          className={`relative w-full overflow-hidden bg-[#141414] border-b border-white/10 ${
-            isTallCrop ? 'aspect-[4/4.4]' : 'aspect-[4/3]'
+          className={`relative w-full overflow-hidden bg-[#1A1A1A] ${
+            isAlternatingTall ? 'aspect-[4/4.5]' : 'aspect-[4/3]'
           }`}
         >
           {!imgError ? (
@@ -51,57 +51,56 @@ function ProjectCard({
               referrerPolicy="no-referrer"
               loading="lazy"
               onError={() => setImgError(true)}
-              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
             />
           ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-[#141414]">
-              <span className="text-xs tracking-[0.15em] text-[#9A968E] tabular-nums">
+            <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-[#1A1A1A]">
+              <span className="text-[11px] tracking-[0.18em] text-[#A58A58] tabular-nums">
                 {project.index}
               </span>
-              <span className="mt-2 font-serif text-2xl text-[#F6F4EE]">{project.name}</span>
+              <span className="mt-2 font-serif text-2xl text-[#F2F0EB]">{project.name}</span>
             </div>
           )}
         </div>
 
-        {/* Unboxed Editorial Caption */}
-        <div className="p-6 sm:p-7">
-          <div className="flex items-center justify-between gap-3 text-[11px] font-medium tracking-[0.14em] uppercase text-[#9A968E]">
-            <span className="inline-flex items-center gap-2">
-              <span className="text-[#F6F4EE] tabular-nums">{project.index}</span>
-              <span aria-hidden="true">/</span>
-              <span>{project.category}</span>
+        {/* Editorial Portfolio Metadata & Description */}
+        <div className="pt-5 pb-4 border-b border-white/12">
+          <div className="flex items-center justify-between gap-3 text-[11px] tracking-[0.16em] uppercase text-[#A7A49E]">
+            <span>
+              <span className="text-[#A58A58] tabular-nums">{project.index}</span> ·{' '}
+              {project.category}
             </span>
             <span>{project.collectionLabel}</span>
           </div>
 
-          <h4 className="mt-3 font-serif text-2xl sm:text-[1.7rem] font-medium leading-tight tracking-tight text-[#F6F4EE] group-hover:italic transition-all">
+          <h4 className="mt-3 font-serif text-2xl sm:text-[1.75rem] font-normal leading-tight text-[#F2F0EB] group-hover:italic transition-all">
             {project.name}
           </h4>
 
-          <p className="mt-3 text-sm leading-relaxed text-[#B5B0A6]">
+          <p className="mt-2.5 text-sm leading-relaxed text-[#A7A49E]">
             {project.shortDescription}
           </p>
         </div>
       </div>
 
-      {/* External Action OR In-Development Label */}
-      <div className="px-6 sm:px-7 pb-6 sm:pb-7 pt-4 border-t border-white/10">
+      {/* Action Link OR In-Development State */}
+      <div className="pt-4">
         {hasLiveUrl ? (
           <a
             href={project.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full inline-flex items-center justify-between gap-3 px-5 py-3 text-xs font-semibold tracking-[0.14em] uppercase text-[#0A0A0A] bg-[#F6F4EE] group-hover:bg-[#8C261A] group-hover:text-[#F6F4EE] transition-colors duration-150 whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F6F4EE]"
+            className="inline-flex items-center justify-between w-full py-2.5 text-[11px] font-medium tracking-[0.16em] uppercase text-[#F2F0EB] hover:text-[#A58A58] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A58A58]"
           >
-            <span>EXPLORAR EXPERIÊNCIA</span>
+            <span>EXPLORE PROJECT</span>
             <ArrowUpRight
-              className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              className="w-4 h-4 text-[#A58A58] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
               aria-hidden="true"
             />
           </a>
         ) : (
-          <div className="w-full py-3 px-4 border border-white/10 text-xs tracking-[0.1em] uppercase text-[#9A968E] text-center">
-            Demonstração em desenvolvimento
+          <div className="py-2.5 text-[11px] tracking-[0.16em] uppercase text-[#A7A49E]">
+            EM DESENVOLVIMENTO
           </div>
         )}
       </div>
@@ -109,7 +108,7 @@ function ProjectCard({
   );
 }
 
-function CollectionBlock({
+function CollectionGallery({
   collection,
   projects,
   layoutMode,
@@ -120,7 +119,7 @@ function CollectionBlock({
 }) {
   const trackRef = useRef<HTMLDivElement | null>(null);
 
-  const scrollByCard = (direction: 'prev' | 'next') => {
+  const scrollTrack = (direction: 'prev' | 'next') => {
     const track = trackRef.current;
     if (!track) return;
     const distance = Math.max(track.clientWidth * 0.65, 320);
@@ -132,59 +131,51 @@ function CollectionBlock({
 
   return (
     <div>
-      {/* Collection Editorial Header + Horizontal Controls */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8 items-end mb-8">
-        <div className="lg:col-span-6">
-          <p className="text-xs font-medium tracking-[0.18em] uppercase text-[#9A968E] mb-2 tabular-nums">
-            COLEÇÃO {collection.number} · {collection.subtitle}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10 pb-5 border-b border-white/12">
+        <div>
+          <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-[#A58A58] mb-2 tabular-nums">
+            COLEÇÃO {collection.number} — {collection.subtitle}
           </p>
-          <h3 className="font-serif text-3xl sm:text-4xl font-medium text-[#F6F4EE]">
+          <h3 className="font-serif text-3xl sm:text-4xl font-normal text-[#F2F0EB]">
             {collection.title}
           </h3>
         </div>
 
-        <div className="lg:col-span-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <p className="text-sm leading-relaxed text-[#B5B0A6] max-w-md">
-            {collection.description}
-          </p>
-
-          {layoutMode === 'horizontal' && (
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                type="button"
-                onClick={() => scrollByCard('prev')}
-                aria-label={`Rolar ${collection.title} para a esquerda`}
-                className="w-10 h-10 inline-flex items-center justify-center border border-white/20 text-[#F6F4EE] hover:border-[#F6F4EE] hover:bg-[#F6F4EE] hover:text-[#0A0A0A] transition-colors cursor-pointer"
-              >
-                <ArrowLeft className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => scrollByCard('next')}
-                aria-label={`Rolar ${collection.title} para a direita`}
-                className="w-10 h-10 inline-flex items-center justify-center border border-white/20 text-[#F6F4EE] hover:border-[#F6F4EE] hover:bg-[#F6F4EE] hover:text-[#0A0A0A] transition-colors cursor-pointer"
-              >
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          )}
-        </div>
+        {layoutMode === 'horizontal' && (
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => scrollTrack('prev')}
+              aria-label={`Anterior em ${collection.title}`}
+              className="w-10 h-10 inline-flex items-center justify-center border border-white/15 text-[#F2F0EB] hover:border-[#A58A58] hover:text-[#A58A58] transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollTrack('next')}
+              aria-label={`Próximo em ${collection.title}`}
+              className="w-10 h-10 inline-flex items-center justify-center border border-white/15 text-[#F2F0EB] hover:border-[#A58A58] hover:text-[#A58A58] transition-colors cursor-pointer"
+            >
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Horizontal Runway OR Editorial Grid */}
       {layoutMode === 'horizontal' ? (
         <div
           ref={trackRef}
-          className="editorial-scroll-track flex items-start gap-6 overflow-x-auto pb-6 snap-x snap-mandatory"
+          className="editorial-scroll-track flex items-start gap-8 overflow-x-auto pb-6 snap-x snap-mandatory"
         >
           {projects.map((project, idx) => (
-            <ProjectCard key={project.id} project={project} idx={idx} layoutMode="horizontal" />
+            <ProjectEntry key={project.id} project={project} idx={idx} layoutMode="horizontal" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-14">
           {projects.map((project, idx) => (
-            <ProjectCard key={project.id} project={project} idx={idx} layoutMode="grid" />
+            <ProjectEntry key={project.id} project={project} idx={idx} layoutMode="editorial" />
           ))}
         </div>
       )}
@@ -204,37 +195,36 @@ export function PortfolioSection() {
   return (
     <section
       id="portfolio"
-      className="relative py-24 sm:py-32 lg:py-36 bg-[#0A0A0A] text-[#F6F4EE] border-t border-white/10"
+      className="relative py-28 sm:py-36 lg:py-44 bg-[#111111] text-[#F2F0EB]"
     >
-      <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-14">
-        {/* Section Header + Collection & Layout Controls */}
-        <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 pb-12 border-b border-white/15">
+      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
+        {/* Section Header + Minimalist Filters */}
+        <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 pb-14 border-b border-white/12">
           <div className="max-w-2xl">
-            <p className="text-xs font-medium tracking-[0.18em] uppercase text-[#9A968E] mb-4">
-              03 · Portfólio — Centro da Experiência
+            <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-[#A58A58] mb-5">
+              04 — Selected Works
             </p>
-            <h2 className="font-serif text-[clamp(2.2rem,4vw,3.75rem)] font-medium leading-[1.02] tracking-[-0.02em] text-[#F6F4EE] [text-wrap:balance]">
-              Oito projetos independentes em duas{' '}
-              <span className="italic font-normal">coleções editoriais</span>.
+            <h2 className="font-serif text-[clamp(2.3rem,4.2vw,4rem)] font-normal leading-[1.03] tracking-[-0.025em] text-[#F2F0EB] [text-wrap:balance]">
+              Experiências criadas para{' '}
+              <span className="italic">diferentes universos.</span>
             </h2>
           </div>
 
           <div className="flex flex-wrap items-center gap-4">
-            {/* Collection Filter */}
             <div
               role="tablist"
-              aria-label="Filtrar coleções do portfólio"
-              className="inline-flex flex-wrap items-center gap-1 p-1 border border-white/15 bg-[#121212]"
+              aria-label="Filtrar coleções"
+              className="inline-flex flex-wrap items-center gap-1 p-1 border border-white/15"
             >
               <button
                 type="button"
                 role="tab"
                 aria-selected={activeFilter === 'all'}
                 onClick={() => setActiveFilter('all')}
-                className={`px-3.5 py-2 text-xs font-medium tracking-[0.06em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                className={`px-3.5 py-2 text-[11px] font-medium tracking-[0.12em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                   activeFilter === 'all'
-                    ? 'bg-[#F6F4EE] text-[#0A0A0A]'
-                    : 'text-[#B5B0A6] hover:text-[#F6F4EE]'
+                    ? 'bg-[#F2F0EB] text-[#111111]'
+                    : 'text-[#A7A49E] hover:text-[#F2F0EB]'
                 }`}
               >
                 Todas
@@ -244,10 +234,10 @@ export function PortfolioSection() {
                 role="tab"
                 aria-selected={activeFilter === 'creator-pro'}
                 onClick={() => setActiveFilter('creator-pro')}
-                className={`px-3.5 py-2 text-xs font-medium tracking-[0.06em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                className={`px-3.5 py-2 text-[11px] font-medium tracking-[0.12em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                   activeFilter === 'creator-pro'
-                    ? 'bg-[#F6F4EE] text-[#0A0A0A]'
-                    : 'text-[#B5B0A6] hover:text-[#F6F4EE]'
+                    ? 'bg-[#F2F0EB] text-[#111111]'
+                    : 'text-[#A7A49E] hover:text-[#F2F0EB]'
                 }`}
               >
                 01 · Creator Pro
@@ -257,40 +247,39 @@ export function PortfolioSection() {
                 role="tab"
                 aria-selected={activeFilter === 'creator-pro-experience'}
                 onClick={() => setActiveFilter('creator-pro-experience')}
-                className={`px-3.5 py-2 text-xs font-medium tracking-[0.06em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                className={`px-3.5 py-2 text-[11px] font-medium tracking-[0.12em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                   activeFilter === 'creator-pro-experience'
-                    ? 'bg-[#F6F4EE] text-[#0A0A0A]'
-                    : 'text-[#B5B0A6] hover:text-[#F6F4EE]'
+                    ? 'bg-[#F2F0EB] text-[#111111]'
+                    : 'text-[#A7A49E] hover:text-[#F2F0EB]'
                 }`}
               >
                 02 · Experience
               </button>
             </div>
 
-            {/* Layout Mode Switcher */}
             <div
               role="group"
-              aria-label="Modo de exibição da galeria"
-              className="inline-flex items-center gap-1 p-1 border border-white/15 bg-[#121212]"
+              aria-label="Modo de exibição"
+              className="inline-flex items-center gap-1 p-1 border border-white/15"
             >
               <button
                 type="button"
                 onClick={() => setLayoutMode('horizontal')}
-                className={`px-3 py-2 text-xs font-medium tracking-[0.06em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                className={`px-3 py-2 text-[11px] font-medium tracking-[0.12em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                   layoutMode === 'horizontal'
-                    ? 'bg-[#8C261A] text-[#F6F4EE]'
-                    : 'text-[#B5B0A6] hover:text-[#F6F4EE]'
+                    ? 'bg-[#A58A58] text-[#111111]'
+                    : 'text-[#A7A49E] hover:text-[#F2F0EB]'
                 }`}
               >
-                Galeria Horizontal
+                Galeria
               </button>
               <button
                 type="button"
-                onClick={() => setLayoutMode('grid')}
-                className={`px-3 py-2 text-xs font-medium tracking-[0.06em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                  layoutMode === 'grid'
-                    ? 'bg-[#8C261A] text-[#F6F4EE]'
-                    : 'text-[#B5B0A6] hover:text-[#F6F4EE]'
+                onClick={() => setLayoutMode('editorial')}
+                className={`px-3 py-2 text-[11px] font-medium tracking-[0.12em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                  layoutMode === 'editorial'
+                    ? 'bg-[#A58A58] text-[#111111]'
+                    : 'text-[#A7A49E] hover:text-[#F2F0EB]'
                 }`}
               >
                 Grade
@@ -299,12 +288,12 @@ export function PortfolioSection() {
           </div>
         </div>
 
-        {/* Collections Loop */}
-        <div className="mt-14 space-y-24">
+        {/* Collections */}
+        <div className="mt-16 space-y-24">
           {visibleCollections.map((collection) => {
             const projects = PORTFOLIO_PROJECTS.filter((p) => p.collection === collection.id);
             return (
-              <CollectionBlock
+              <CollectionGallery
                 key={collection.id}
                 collection={collection}
                 projects={projects}

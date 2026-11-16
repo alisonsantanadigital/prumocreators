@@ -15,14 +15,13 @@ export interface PortfolioProject {
   collection: CollectionId;
   collectionLabel: string;
   name: string;
-  creatorOrFocus: string;
   category: string;
   shortDescription: string;
   image: string;
   imageAlt: string;
   /**
-   * URL publicada do projeto individual.
-   * Deixe como string vazia ("") para projetos ainda em desenvolvimento.
+   * Endereço publicado do projeto individual.
+   * Mantenha string vazia ("") para projetos ainda sem URL configurada.
    */
   url: string;
 }
@@ -32,7 +31,6 @@ export interface PortfolioCollection {
   number: string;
   title: string;
   subtitle: string;
-  description: string;
 }
 
 export const PORTFOLIO_COLLECTIONS: PortfolioCollection[] = [
@@ -40,23 +38,19 @@ export const PORTFOLIO_COLLECTIONS: PortfolioCollection[] = [
     id: 'creator-pro',
     number: '01',
     title: 'Creator Pro',
-    subtitle: 'Apresentações comerciais',
-    description:
-      'Páginas comerciais de estética editorial desenhadas para traduzir identidade, território criativo e propostas de parceria para marcas.',
+    subtitle: 'Apresentações digitais profissionais',
   },
   {
     id: 'creator-pro-experience',
     number: '02',
     title: 'Creator Pro Experience',
-    subtitle: 'Experiências digitais avançadas',
-    description:
-      'Narrativas digitais imersivas com direção de arte autoral, ritmo cinematográfico e composição interativa sob medida.',
+    subtitle: 'Experiências digitais com direção de arte autoral',
   },
 ];
 
 /**
- * Estrutura centralizada de portfólio da Prumo Creators.
- * Para publicar um projeto pendente, basta preencher o campo `url` com o endereço oficial.
+ * Configuração centralizada de links dos oito projetos do portfólio.
+ * Para ativar um projeto em desenvolvimento, preencha o campo `url` com o link publicado.
  */
 export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
   // COLEÇÃO 01 — CREATOR PRO
@@ -66,12 +60,11 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     collection: 'creator-pro',
     collectionLabel: 'Creator Pro',
     name: 'Lifestyle — Lívia Martins',
-    creatorOrFocus: 'Lívia Martins',
     category: 'Lifestyle',
     shortDescription:
-      'Apresentação comercial com curadoria editorial de rotina, hospitalidade e parcerias para marcas de estilo de vida.',
+      'Apresentação comercial editorial estruturada para rotina, hospitalidade e parcerias de marca.',
     image: lifestyleImg,
-    imageAlt: 'Editorial Lifestyle — Lívia Martins em ambiente arquitetônico iluminado',
+    imageAlt: 'Lifestyle — Lívia Martins em ambiente arquitetônico contemporâneo',
     url: 'https://creator-pro-lifestyle.vercel.app/',
   },
   {
@@ -80,12 +73,11 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     collection: 'creator-pro',
     collectionLabel: 'Creator Pro',
     name: 'Fashion — Marina Costa',
-    creatorOrFocus: 'Marina Costa',
     category: 'Fashion',
     shortDescription:
-      'Vitrine de posicionamento em moda autoral com foco em direção estética, editoriais e campanhas contemporâneas.',
+      'Direção estética e posicionamento comercial para campanhas de moda e colaborações autorais.',
     image: fashionImg,
-    imageAlt: 'Editorial Fashion — Marina Costa em arquitetura brutalista de concreto',
+    imageAlt: 'Fashion — Marina Costa em arquitetura brutalista minimalista',
     url: 'https://creator-pro-fashion.vercel.app/',
   },
   {
@@ -94,12 +86,11 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     collection: 'creator-pro',
     collectionLabel: 'Creator Pro',
     name: 'Beauty — Isabela Rocha',
-    creatorOrFocus: 'Isabela Rocha',
     category: 'Beauty',
     shortDescription:
-      'Estrutura comercial desenhada para conectar autoridade em skincare, perfumaria e campanhas de beleza.',
+      'Arquitetura comercial desenhada para autoridade em skincare, perfumaria e campanhas de beleza.',
     image: beautyImg,
-    imageAlt: 'Editorial Beauty — Isabela Rocha com iluminação natural de estúdio',
+    imageAlt: 'Beauty — Isabela Rocha em retrato editorial de estúdio',
     url: 'https://creator-pro-beauty.vercel.app/',
   },
   {
@@ -108,12 +99,11 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     collection: 'creator-pro',
     collectionLabel: 'Creator Pro',
     name: 'Fitness — Camila Mendes',
-    creatorOrFocus: 'Camila Mendes',
     category: 'Fitness',
     shortDescription:
-      'Posicionamento estratégico para performance atlética, bem-estar e colaborações com marcas esportivas.',
+      'Posicionamento estratégico para performance atlética, bem-estar e marcas esportivas.',
     image: fitnessImg,
-    imageAlt: 'Editorial Fitness — Camila Mendes em cena atlética de alto contraste',
+    imageAlt: 'Fitness — Camila Mendes em cena atlética de estúdio arquitetônico',
     url: 'https://creator-pro-fitness.vercel.app/',
   },
 
@@ -123,13 +113,12 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     index: '01',
     collection: 'creator-pro-experience',
     collectionLabel: 'Creator Pro Experience',
-    name: 'Reality Flow',
-    creatorOrFocus: 'Lifestyle',
+    name: 'Reality Flow — Lifestyle',
     category: 'Lifestyle',
     shortDescription:
-      'Experiência digital contínua que transforma cotidiano, curadoria e narrativa visual em uma jornada editorial fluida.',
+      'Experiência digital contínua com narrativa visual fluida e direção editorial contemporânea.',
     image: realityFlowImg,
-    imageAlt: 'Editorial Reality Flow com silhueta em linho sob luz natural mediterrânea',
+    imageAlt: 'Reality Flow — Lifestyle em terraço mediterrâneo sob luz natural',
     url: 'https://prumo-creators-creator-pro-experien.vercel.app/',
   },
   {
@@ -137,13 +126,12 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     index: '02',
     collection: 'creator-pro-experience',
     collectionLabel: 'Creator Pro Experience',
-    name: 'Digital Couture',
-    creatorOrFocus: 'Fashion',
+    name: 'Digital Couture — Fashion',
     category: 'Fashion',
     shortDescription:
-      'Editorial interativo de alta moda onde silhueta, alfaiataria arquitetônica e direção visual elevam o discurso de marca.',
+      'Editorial interativo de alta moda onde silhueta, ritmo visual e arquitetura definem o discurso.',
     image: digitalCoutureImg,
-    imageAlt: 'Editorial Digital Couture com vestido plissado escultural em galeria minimalista',
+    imageAlt: 'Digital Couture — Fashion em vestido plissado escultural',
     url: '',
   },
   {
@@ -151,13 +139,12 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     index: '03',
     collection: 'creator-pro-experience',
     collectionLabel: 'Creator Pro Experience',
-    name: 'Beautyverse',
-    creatorOrFocus: 'Beauty',
+    name: 'Beautyverse — Beauty',
     category: 'Beauty',
     shortDescription:
-      'Ambiente sensorial editorial para apresentação de texturas, campanhas e narrativas visuais no universo beauty.',
+      'Ambiente sensorial digital dedicado a texturas, luz natural e estética editorial de beleza.',
     image: beautyverseImg,
-    imageAlt: 'Editorial Beautyverse com perfil minimalista sobre calcário bruto e luz natural',
+    imageAlt: 'Beautyverse — Beauty em composição minimalista sobre calcário',
     url: '',
   },
   {
@@ -165,13 +152,12 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     index: '04',
     collection: 'creator-pro-experience',
     collectionLabel: 'Creator Pro Experience',
-    name: 'Human Performance',
-    creatorOrFocus: 'Fitness',
+    name: 'Human Performance — Fitness',
     category: 'Fitness',
     shortDescription:
-      'Experiência orientada por movimento, disciplina e estética contemporânea para creators de alta performance.',
+      'Experiência visual orientada por movimento, disciplina e linguagem esportiva contemporânea.',
     image: humanPerformanceImg,
-    imageAlt: 'Editorial Human Performance em movimento dentro de átrio arquitetônico iluminado',
+    imageAlt: 'Human Performance — Fitness em átrio arquitetônico iluminado',
     url: '',
   },
 ];

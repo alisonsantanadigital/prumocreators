@@ -1,225 +1,224 @@
 import { useState, type FormEvent } from 'react';
-import { ArrowUpRight, Check, Mail, MessageSquare, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
-import { OFFICIAL_CONTACT_CONFIG, SOLUTIONS, STUDIO_MEDIA } from '../data/studio';
+import { ArrowUpRight, Check, Mail, MessageSquare } from 'lucide-react';
+import { OFFICIAL_CONTACT_CONFIG, PRACTICE_AREAS } from '../data/studio';
 
 export function ContactSection() {
-  const [panelMode, setPanelMode] = useState<'none' | 'brief' | 'channels'>('none');
-  const [creatorName, setCreatorName] = useState('');
-  const [selectedSolution, setSelectedSolution] = useState(SOLUTIONS[0].title);
-  const [notes, setNotes] = useState('');
+  const [name, setName] = useState('');
+  const [channel, setChannel] = useState('');
+  const [interest, setInterest] = useState(PRACTICE_AREAS[0].title);
+  const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [imgError, setImgError] = useState(false);
 
   const hasWhatsapp = Boolean(OFFICIAL_CONTACT_CONFIG.whatsappNumber.trim());
   const hasEmail = Boolean(OFFICIAL_CONTACT_CONFIG.emailAddress.trim());
 
   const whatsappHref = hasWhatsapp
-    ? `https://wa.me/${OFFICIAL_CONTACT_CONFIG.whatsappNumber.replace(/\D/g, '')}`
+    ? `https://wa.me/${OFFICIAL_CONTACT_CONFIG.whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent(
+        `Olá PRUMO CREATORS${name ? `, sou ${name}` : ''}. Gostaria de conversar sobre ${interest}.${
+          message ? ` ${message}` : ''
+        }`,
+      )}`
     : undefined;
-  const emailHref = hasEmail ? `mailto:${OFFICIAL_CONTACT_CONFIG.emailAddress.trim()}` : undefined;
 
-  const handleBriefSubmit = (e: FormEvent) => {
+  const emailHref = hasEmail
+    ? `mailto:${OFFICIAL_CONTACT_CONFIG.emailAddress.trim()}?subject=${encodeURIComponent(
+        `Contato PRUMO CREATORS — ${interest}`,
+      )}&body=${encodeURIComponent(`${name ? `Nome: ${name}\n` : ''}${channel ? `Perfil/Canal: ${channel}\n` : ''}\n${message}`)}`
+    : undefined;
+
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!creatorName.trim()) return;
+    if (!name.trim()) return;
     setSubmitted(true);
   };
 
-  const resetBrief = () => {
+  const resetForm = () => {
     setSubmitted(false);
-    setCreatorName('');
-    setNotes('');
+    setName('');
+    setChannel('');
+    setMessage('');
   };
 
   return (
     <section
       id="contato"
-      className="relative py-24 sm:py-32 lg:py-40 bg-[#0A0A0A] text-[#F6F4EE] border-t border-white/10 overflow-hidden"
+      className="relative py-28 sm:py-36 lg:py-44 bg-[#111111] text-[#F2F0EB]"
     >
-      <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-14">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          {/* Left: High-Impact Editorial Conversion Copy */}
-          <div className="lg:col-span-8">
-            <p className="text-xs font-medium tracking-[0.18em] uppercase text-[#9A968E] mb-5">
-              05 · Contato e Conversão
+      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-16 items-start">
+          {/* Left: Editorial Invitation & Direct Channels */}
+          <div className="lg:col-span-6">
+            <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-[#A58A58] mb-6">
+              07 — Contato
             </p>
 
-            <h2 className="font-serif text-[clamp(2.35rem,4.8vw,4.5rem)] font-medium leading-[1.02] tracking-[-0.02em] text-[#F6F4EE] [text-wrap:balance]">
-              SEU PRÓXIMO NÍVEL COMEÇA COM UMA{' '}
-              <span className="italic font-normal">NOVA APRESENTAÇÃO.</span>
+            <h2 className="font-serif text-[clamp(2.4rem,4.5vw,4.25rem)] font-normal leading-[1.03] tracking-[-0.025em] text-[#F2F0EB] [text-wrap:balance]">
+              Vamos construir sua{' '}
+              <span className="italic">próxima presença digital?</span>
             </h2>
 
-            <p className="mt-7 max-w-xl text-base sm:text-xl leading-relaxed text-[#D6D2C9]">
-              Vamos transformar sua presença digital em uma experiência que represente o valor da
-              sua marca pessoal.
+            <p className="mt-6 text-base sm:text-xl leading-relaxed text-[#A7A49E] max-w-lg">
+              Seu trabalho merece uma apresentação profissional.
             </p>
 
-            {/* Primary & Secondary Conversion Actions */}
-            <div className="mt-10 flex flex-wrap items-center gap-4">
-              <button
-                type="button"
-                onClick={() => {
-                  setSubmitted(false);
-                  setPanelMode((prev) => (prev === 'brief' ? 'none' : 'brief'));
-                }}
-                className="inline-flex items-center gap-2.5 px-7 py-4 text-xs font-semibold tracking-[0.14em] uppercase text-[#0A0A0A] bg-[#F6F4EE] hover:bg-[#8C261A] hover:text-[#F6F4EE] transition-colors duration-150 cursor-pointer whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F6F4EE]"
-              >
-                QUERO MINHA EXPERIÊNCIA
-                <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setPanelMode((prev) => (prev === 'channels' ? 'none' : 'channels'))}
-                className="inline-flex items-center gap-2.5 px-7 py-4 text-xs font-medium tracking-[0.14em] uppercase text-[#F6F4EE] border border-white/25 hover:border-[#F6F4EE] transition-colors duration-150 cursor-pointer whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F6F4EE]"
-              >
-                FALAR COM A PRUMO
-                <MessageSquare className="w-4 h-4" aria-hidden="true" />
-              </button>
-            </div>
-          </div>
-
-          {/* Right: Editorial Campaign Portrait Frame */}
-          <div className="hidden lg:block lg:col-span-4">
-            <div className="bg-[#141414] p-2.5 border border-white/15">
-              <div className="aspect-[3/4] overflow-hidden bg-[#1B1B1B]">
-                {!imgError ? (
-                  <img
-                    src={STUDIO_MEDIA.aboutAtelier}
-                    alt={STUDIO_MEDIA.aboutAtelierAlt}
-                    referrerPolicy="no-referrer"
-                    loading="lazy"
-                    onError={() => setImgError(true)}
-                    className="w-full h-full object-cover"
-                  />
+            {/* WhatsApp & E-mail Channel Blocks (Centralized Config) */}
+            <div className="mt-14 pt-10 border-t border-white/12 grid grid-cols-1 sm:grid-cols-2 gap-8">
+              <div>
+                <div className="flex items-center gap-2.5 text-[11px] font-medium tracking-[0.16em] uppercase text-[#A58A58] mb-3">
+                  <MessageSquare className="w-3.5 h-3.5" aria-hidden="true" />
+                  <span>WhatsApp</span>
+                </div>
+                {whatsappHref ? (
+                  <a
+                    href={whatsappHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-[#F2F0EB] border-b border-[#A58A58] pb-1 hover:text-[#A58A58] transition-colors"
+                  >
+                    <span>Conversar pelo WhatsApp</span>
+                    <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                  </a>
                 ) : (
-                  <div className="w-full h-full bg-[#1C1C1C]" />
+                  <p className="text-xs leading-relaxed text-[#A7A49E]">
+                    Canal direto preparado para receber o número oficial na configuração do estúdio.
+                  </p>
                 )}
               </div>
-              <div className="pt-2.5 px-0.5 flex items-center justify-between text-[11px] tracking-[0.12em] uppercase text-[#9A968E]">
-                <span>Atendimento Comercial</span>
-                <span>Prumo Creators</span>
+
+              <div>
+                <div className="flex items-center gap-2.5 text-[11px] font-medium tracking-[0.16em] uppercase text-[#A58A58] mb-3">
+                  <Mail className="w-3.5 h-3.5" aria-hidden="true" />
+                  <span>E-mail</span>
+                </div>
+                {emailHref ? (
+                  <a
+                    href={emailHref}
+                    className="inline-flex items-center gap-2 text-sm font-medium text-[#F2F0EB] border-b border-[#A58A58] pb-1 hover:text-[#A58A58] transition-colors"
+                  >
+                    <span className="truncate">{OFFICIAL_CONTACT_CONFIG.emailAddress}</span>
+                    <ArrowUpRight className="w-4 h-4 shrink-0" aria-hidden="true" />
+                  </a>
+                ) : (
+                  <p className="text-xs leading-relaxed text-[#A7A49E]">
+                    Endereço preparado para receber o e-mail comercial oficial na configuração.
+                  </p>
+                )}
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Interactive Conversion Panels */}
-        <AnimatePresence mode="wait">
-          {panelMode === 'brief' && (
-            <motion.div
-              key="brief-panel"
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 8 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-14 max-w-3xl bg-[#121212] border border-white/15 p-7 sm:p-10"
-            >
-              <div className="flex items-center justify-between gap-4 pb-5 border-b border-white/10">
-                <div>
-                  <h3 className="font-serif text-2xl font-medium text-[#F6F4EE]">
-                    Estruturar Novo Projeto
-                  </h3>
-                  <p className="mt-1 text-xs text-[#9A968E]">
-                    Organize os detalhes iniciais da sua apresentação ou experiência digital.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setPanelMode('none')}
-                  aria-label="Fechar formulário"
-                  className="w-10 h-10 inline-flex items-center justify-center text-[#9A968E] hover:text-[#F6F4EE] border border-white/10 cursor-pointer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
+          {/* Right: Elegant Functional Contact Form */}
+          <div className="lg:col-span-6">
+            <div className="border border-white/15 p-7 sm:p-10 bg-[#151515]">
               {submitted ? (
-                <div className="py-8">
-                  <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.12em] uppercase text-[#F6F4EE]">
-                    <Check className="w-4 h-4 text-[#8C261A]" aria-hidden="true" />
-                    <span>Direcionamento registrado</span>
+                <div className="py-10">
+                  <div className="inline-flex items-center gap-2.5 text-[11px] font-medium tracking-[0.18em] uppercase text-[#A58A58]">
+                    <Check className="w-4 h-4" aria-hidden="true" />
+                    <span>Solicitação preparada</span>
                   </div>
-                  <p className="mt-3 font-serif text-2xl text-[#F6F4EE]">
-                    Resumo preparado para <span className="italic">{creatorName}</span> em{' '}
-                    {selectedSolution}.
-                  </p>
-                  <p className="mt-2 text-sm text-[#B5B0A6]">
+                  <h3 className="mt-4 font-serif text-3xl font-normal text-[#F2F0EB]">
+                    Obrigado, <span className="italic">{name}</span>.
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[#A7A49E]">
+                    Seus dados iniciais para <span className="text-[#F2F0EB]">{interest}</span> foram
+                    organizados.
                     {hasWhatsapp || hasEmail
-                      ? 'Selecione um dos canais oficiais abaixo para enviar seu resumo.'
-                      : 'Os canais oficiais de WhatsApp e e-mail estão preparados para receber os dados comerciais.'}
+                      ? ' Utilize um dos canais diretos ao lado ou abaixo para concluir o envio.'
+                      : ' Assim que os canais comerciais oficiais forem preenchidos na configuração, o envio direto por WhatsApp ou e-mail ficará ativo.'}
                   </p>
-                  <div className="mt-6 flex flex-wrap gap-3">
+
+                  <div className="mt-8 flex flex-wrap items-center gap-4">
                     {whatsappHref && (
                       <a
-                        href={`${whatsappHref}?text=${encodeURIComponent(
-                          `Olá Prumo Creators, sou ${creatorName} e tenho interesse em ${selectedSolution}. ${notes}`,
-                        )}`}
+                        href={whatsappHref}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-5 py-3 text-xs font-semibold tracking-[0.1em] uppercase text-[#0A0A0A] bg-[#F6F4EE] hover:bg-[#8C261A] hover:text-[#F6F4EE]"
+                        className="inline-flex items-center gap-2 px-5 py-3 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#111111] bg-[#F2F0EB] hover:bg-[#A58A58] transition-colors"
                       >
-                        Enviar via WhatsApp
+                        <span>Enviar pelo WhatsApp</span>
                         <ArrowUpRight className="w-3.5 h-3.5" />
                       </a>
                     )}
                     {emailHref && (
                       <a
-                        href={`${emailHref}?subject=${encodeURIComponent(
-                          `Projeto ${selectedSolution} — ${creatorName}`,
-                        )}&body=${encodeURIComponent(notes)}`}
-                        className="inline-flex items-center gap-2 px-5 py-3 text-xs font-semibold tracking-[0.1em] uppercase text-[#F6F4EE] border border-white/25 hover:border-[#F6F4EE]"
+                        href={emailHref}
+                        className="inline-flex items-center gap-2 px-5 py-3 text-[11px] font-medium tracking-[0.14em] uppercase text-[#F2F0EB] border border-white/25 hover:border-[#A58A58] transition-colors"
                       >
-                        Enviar por E-mail
+                        <span>Enviar por E-mail</span>
                         <ArrowUpRight className="w-3.5 h-3.5" />
                       </a>
                     )}
                     <button
                       type="button"
-                      onClick={resetBrief}
-                      className="px-4 py-3 text-xs font-medium tracking-[0.08em] uppercase text-[#9A968E] hover:text-[#F6F4EE] cursor-pointer"
+                      onClick={resetForm}
+                      className="text-[11px] font-medium tracking-[0.14em] uppercase text-[#A7A49E] hover:text-[#F2F0EB] transition-colors cursor-pointer"
                     >
-                      Preparar outro resumo
+                      Novo preenchimento
                     </button>
                   </div>
                 </div>
               ) : (
-                <form onSubmit={handleBriefSubmit} className="mt-6 space-y-5">
-                  <div>
-                    <label
-                      htmlFor="creator-name"
-                      className="block text-xs font-medium tracking-[0.08em] uppercase text-[#D6D2C9] mb-2"
-                    >
-                      Nome do Creator ou Marca
-                    </label>
-                    <input
-                      id="creator-name"
-                      type="text"
-                      required
-                      value={creatorName}
-                      onChange={(e) => setCreatorName(e.target.value)}
-                      placeholder="Ex.: Nome artístico ou projeto"
-                      className="w-full px-4 py-3 text-sm bg-[#0A0A0A] border border-white/15 text-[#F6F4EE] placeholder:text-[#6B6860] focus:outline-none focus:border-[#F6F4EE]"
-                    />
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="pb-4 border-b border-white/10">
+                    <span className="text-[11px] font-medium tracking-[0.18em] uppercase text-[#A58A58]">
+                      Iniciar Conversa
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label
+                        htmlFor="contact-name"
+                        className="block text-[11px] font-medium tracking-[0.12em] uppercase text-[#A7A49E] mb-2"
+                      >
+                        Nome
+                      </label>
+                      <input
+                        id="contact-name"
+                        type="text"
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Seu nome ou marca"
+                        className="w-full px-0 py-2.5 text-sm bg-transparent border-b border-white/20 text-[#F2F0EB] placeholder:text-[#5C5A55] focus:outline-none focus:border-[#A58A58] transition-colors"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="contact-channel"
+                        className="block text-[11px] font-medium tracking-[0.12em] uppercase text-[#A7A49E] mb-2"
+                      >
+                        Perfil ou Rede Principal
+                      </label>
+                      <input
+                        id="contact-channel"
+                        type="text"
+                        value={channel}
+                        onChange={(e) => setChannel(e.target.value)}
+                        placeholder="@seuusuario"
+                        className="w-full px-0 py-2.5 text-sm bg-transparent border-b border-white/20 text-[#F2F0EB] placeholder:text-[#5C5A55] focus:outline-none focus:border-[#A58A58] transition-colors"
+                      />
+                    </div>
                   </div>
 
                   <div>
-                    <span className="block text-xs font-medium tracking-[0.08em] uppercase text-[#D6D2C9] mb-2">
-                      Solução de interesse
+                    <span className="block text-[11px] font-medium tracking-[0.12em] uppercase text-[#A7A49E] mb-3">
+                      Área de Interesse
                     </span>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                      {SOLUTIONS.map((sol) => (
+                      {PRACTICE_AREAS.map((area) => (
                         <button
-                          key={sol.id}
+                          key={area.id}
                           type="button"
-                          onClick={() => setSelectedSolution(sol.title)}
-                          className={`px-4 py-3 text-left text-xs font-medium border transition-colors cursor-pointer ${
-                            selectedSolution === sol.title
-                              ? 'bg-[#F6F4EE] border-[#F6F4EE] text-[#0A0A0A]'
-                              : 'bg-[#0A0A0A] border-white/15 text-[#B5B0A6] hover:text-[#F6F4EE]'
+                          onClick={() => setInterest(area.title)}
+                          className={`px-4 py-3 text-left text-[11px] font-medium tracking-[0.08em] uppercase border transition-colors cursor-pointer ${
+                            interest === area.title
+                              ? 'border-[#A58A58] bg-[#A58A58]/15 text-[#F2F0EB]'
+                              : 'border-white/12 text-[#A7A49E] hover:border-white/30 hover:text-[#F2F0EB]'
                           }`}
                         >
-                          {sol.index}. {sol.title}
+                          {area.index} · {area.title}
                         </button>
                       ))}
                     </div>
@@ -227,112 +226,46 @@ export function ContactSection() {
 
                   <div>
                     <label
-                      htmlFor="creator-notes"
-                      className="block text-xs font-medium tracking-[0.08em] uppercase text-[#D6D2C9] mb-2"
+                      htmlFor="contact-message"
+                      className="block text-[11px] font-medium tracking-[0.12em] uppercase text-[#A7A49E] mb-2"
                     >
-                      Objetivo da apresentação (opcional)
+                      Sobre o Projeto
                     </label>
                     <textarea
-                      id="creator-notes"
+                      id="contact-message"
                       rows={3}
-                      value={notes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      placeholder="Conte brevemente seu segmento e o momento atual do projeto"
-                      className="w-full px-4 py-3 text-sm bg-[#0A0A0A] border border-white/15 text-[#F6F4EE] placeholder:text-[#6B6860] focus:outline-none focus:border-[#F6F4EE]"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder="Descreva brevemente seu momento e o que busca construir"
+                      className="w-full px-0 py-2.5 text-sm bg-transparent border-b border-white/20 text-[#F2F0EB] placeholder:text-[#5C5A55] focus:outline-none focus:border-[#A58A58] transition-colors resize-none"
                     />
                   </div>
 
-                  <div className="pt-2 flex items-center justify-end">
+                  <div className="pt-2 flex flex-wrap items-center justify-between gap-4">
                     <button
                       type="submit"
-                      className="px-6 py-3 text-xs font-semibold tracking-[0.12em] uppercase text-[#0A0A0A] bg-[#F6F4EE] hover:bg-[#8C261A] hover:text-[#F6F4EE] transition-colors cursor-pointer"
+                      className="inline-flex items-center gap-2.5 px-7 py-3.5 text-[11px] font-semibold tracking-[0.16em] uppercase text-[#111111] bg-[#F2F0EB] hover:bg-[#A58A58] transition-colors duration-150 cursor-pointer"
                     >
-                      Confirmar Direcionamento
+                      <span>Enviar Solicitação</span>
+                      <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                     </button>
+
+                    {whatsappHref && (
+                      <a
+                        href={whatsappHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] font-medium tracking-[0.14em] uppercase text-[#A58A58] hover:text-[#F2F0EB] transition-colors"
+                      >
+                        Falar via WhatsApp
+                      </a>
+                    )}
                   </div>
                 </form>
               )}
-            </motion.div>
-          )}
-
-          {panelMode === 'channels' && (
-            <motion.div
-              key="channels-panel"
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 8 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-14 max-w-3xl bg-[#121212] border border-white/15 p-7 sm:p-10"
-            >
-              <div className="flex items-center justify-between gap-4 pb-5 border-b border-white/10">
-                <div>
-                  <h3 className="font-serif text-2xl font-medium text-[#F6F4EE]">
-                    Canais Comerciais Prumo Creators
-                  </h3>
-                  <p className="mt-1 text-xs text-[#9A968E]">
-                    Estrutura preparada para atendimento oficial via WhatsApp e E-mail.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setPanelMode('none')}
-                  aria-label="Fechar canais"
-                  className="w-10 h-10 inline-flex items-center justify-center text-[#9A968E] hover:text-[#F6F4EE] border border-white/10 cursor-pointer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="p-5 bg-[#0A0A0A] border border-white/10 flex flex-col justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <MessageSquare className="w-4 h-4 text-[#F6F4EE]" aria-hidden="true" />
-                    <span className="text-xs font-semibold tracking-[0.1em] uppercase text-[#F6F4EE]">
-                      WhatsApp Oficial
-                    </span>
-                  </div>
-                  {whatsappHref ? (
-                    <a
-                      href={whatsappHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-between px-4 py-2.5 text-xs font-semibold tracking-[0.1em] uppercase text-[#0A0A0A] bg-[#F6F4EE] hover:bg-[#8C261A] hover:text-[#F6F4EE]"
-                    >
-                      <span>Iniciar conversa</span>
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </a>
-                  ) : (
-                    <p className="text-xs leading-relaxed text-[#9A968E]">
-                      Canal preparado para receber o número comercial oficial da Prumo Creators.
-                    </p>
-                  )}
-                </div>
-
-                <div className="p-5 bg-[#0A0A0A] border border-white/10 flex flex-col justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <Mail className="w-4 h-4 text-[#F6F4EE]" aria-hidden="true" />
-                    <span className="text-xs font-semibold tracking-[0.1em] uppercase text-[#F6F4EE]">
-                      E-mail Comercial
-                    </span>
-                  </div>
-                  {emailHref ? (
-                    <a
-                      href={emailHref}
-                      className="inline-flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-[#F6F4EE] border border-white/25 hover:border-[#F6F4EE]"
-                    >
-                      <span className="truncate">{OFFICIAL_CONTACT_CONFIG.emailAddress}</span>
-                      <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
-                    </a>
-                  ) : (
-                    <p className="text-xs leading-relaxed text-[#9A968E]">
-                      Canal preparado para receber o endereço de e-mail oficial da agência.
-                    </p>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
