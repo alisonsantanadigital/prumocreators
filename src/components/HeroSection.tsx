@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
 import { STUDIO_MEDIA } from '../data/studio';
 import { PrumoMark } from './PrumoMark';
+import { MagneticButton, StaggeredText } from './motion/MotionPrimitives';
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -14,52 +15,75 @@ export function HeroSection() {
   });
 
   const photoY = useTransform(scrollYProgress, [0, 1], prefersReduced ? [0, 0] : [0, 36]);
+  const hasVideo = Boolean(STUDIO_MEDIA.heroVideo && STUDIO_MEDIA.heroVideo.trim().length > 0);
 
   return (
     <section
       id="hero"
       ref={sectionRef}
-      className="relative min-h-[100svh] w-full flex flex-col justify-between bg-[#F2F0EB] text-[#111111] pt-28 sm:pt-32 pb-10 sm:pb-12 overflow-hidden"
+      className="relative min-h-[100svh] w-full flex flex-col justify-between bg-[#F2F0EB] text-[#111111] pt-24 sm:pt-28 pb-8 sm:pb-10 overflow-hidden"
     >
       <div className="mx-auto w-full max-w-[1440px] px-6 sm:px-10 lg:px-16 flex-1 flex flex-col justify-between">
         {/* Top Architectural Title & Identity Mark */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           <div className="lg:col-span-7 pt-2 sm:pt-6">
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
+              initial={prefersReduced ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="flex items-center gap-4 mb-8 sm:mb-12"
             >
-              <PrumoMark className="w-6 h-10 text-[#111111] shrink-0" />
+              {/* Floating Identity Architectural Plumb Mark */}
+              <motion.div
+                animate={
+                  prefersReduced
+                    ? undefined
+                    : {
+                        y: [0, -5, 0],
+                      }
+                }
+                transition={{
+                  duration: 4.8,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+                className="shrink-0 will-change-transform"
+              >
+                <PrumoMark className="w-6 h-10 text-[#111111]" />
+              </motion.div>
               <div className="h-px w-10 bg-[#A58A58]" aria-hidden="true" />
               <span className="text-xs font-medium tracking-[0.22em] uppercase text-[#111111]">
                 PRUMO CREATORS
               </span>
             </motion.div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-              className="font-serif text-[clamp(2.5rem,5.2vw,5rem)] font-normal leading-[1.02] tracking-[-0.025em] text-[#111111] [text-wrap:balance]"
-            >
-              &ldquo;Construímos presenças digitais que{' '}
-              <span className="italic">aproximam talentos</span> de grandes oportunidades.&rdquo;
-            </motion.h1>
+            <h1 className="font-serif text-[clamp(2.5rem,5.2vw,5rem)] font-normal leading-[1.02] tracking-[-0.025em] text-[#111111] [text-wrap:balance]">
+              <StaggeredText
+                immediate
+                delay={0.08}
+                stagger={0.045}
+                segments={[
+                  { text: '“Construímos presenças digitais que ' },
+                  { text: 'aproximam talentos', italic: true },
+                  { text: ' de grandes oportunidades.”' },
+                ]}
+              />
+            </h1>
 
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
+              initial={prefersReduced ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.75, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className="mt-10 sm:mt-14 flex flex-wrap items-center gap-6"
             >
-              <a
-                href="#portfolio"
-                className="inline-flex items-center px-6 py-3.5 text-[11px] font-semibold tracking-[0.16em] uppercase text-[#F2F0EB] bg-[#111111] hover:bg-[#A58A58] hover:text-[#111111] transition-colors duration-200 whitespace-nowrap"
-              >
-                Selected Works
-              </a>
+              <MagneticButton>
+                <a
+                  href="#portfolio"
+                  className="inline-flex items-center px-6 py-3.5 text-[11px] font-semibold tracking-[0.16em] uppercase text-[#F2F0EB] bg-[#111111] hover:bg-[#A58A58] hover:text-[#111111] transition-colors duration-200 whitespace-nowrap"
+                >
+                  Selected Works
+                </a>
+              </MagneticButton>
 
               <a
                 href="#manifesto"
@@ -70,22 +94,56 @@ export function HeroSection() {
             </motion.div>
           </div>
 
-          {/* Right Column: Large-Scale Impact Editorial Photograph */}
+          {/* Right Column: Large-Scale Editorial Visual + Subtle Floating Architectural Guide */}
           <motion.div
             style={{ y: photoY }}
-            initial={{ opacity: 0, y: 20 }}
+            initial={prefersReduced ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-5 lg:pt-4"
+            className="relative lg:col-span-5 lg:pt-4"
           >
+            {/* Floating geometric plumb thread coherent with brand identity */}
+            <motion.div
+              aria-hidden="true"
+              animate={
+                prefersReduced
+                  ? undefined
+                  : {
+                      y: [0, 8, 0],
+                    }
+              }
+              transition={{
+                duration: 5.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="hidden lg:flex flex-col items-center absolute -left-7 top-10 pointer-events-none select-none"
+            >
+              <span className="w-px h-14 bg-[#A58A58]/70" />
+              <span className="w-2 h-2 rotate-45 border border-[#A58A58] bg-[#F2F0EB]" />
+            </motion.div>
+
             <div className="relative aspect-[4/5] sm:aspect-[16/11] lg:aspect-[4/5] overflow-hidden bg-[#E5E2DC]">
-              {!imgError ? (
-                <img
+              {hasVideo ? (
+                <video
+                  src={STUDIO_MEDIA.heroVideo}
+                  poster={STUDIO_MEDIA.heroCampaign}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+              ) : !imgError ? (
+                <motion.img
                   src={STUDIO_MEDIA.heroCampaign}
                   alt={STUDIO_MEDIA.heroCampaignAlt}
                   referrerPolicy="no-referrer"
                   onError={() => setImgError(true)}
-                  className="w-full h-full object-cover"
+                  initial={prefersReduced ? false : { scale: 1.05 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+                  className="w-full h-full object-cover will-change-transform"
                 />
               ) : (
                 <div className="w-full h-full bg-[#E5E2DC]" />
@@ -98,7 +156,7 @@ export function HeroSection() {
           </motion.div>
         </div>
 
-        {/* Discrete Scroll Indicator */}
+        {/* Discrete Scroll Indicator with Vertical Floating Plumb Thread */}
         <div className="mt-12 pt-5 border-t border-[#111111]/10 flex items-center justify-between gap-4">
           <span className="text-[11px] tracking-[0.16em] uppercase text-[#A7A49E]">
             Direção de Arte · Estratégia · Experiências Digitais
@@ -109,7 +167,22 @@ export function HeroSection() {
             className="inline-flex items-center gap-3 text-[11px] tracking-[0.16em] uppercase text-[#111111] hover:text-[#A58A58] transition-colors whitespace-nowrap"
           >
             <span>Role para explorar</span>
-            <span className="block w-px h-5 bg-[#A58A58]" aria-hidden="true" />
+            <motion.span
+              aria-hidden="true"
+              animate={
+                prefersReduced
+                  ? undefined
+                  : {
+                      y: [0, 4, 0],
+                    }
+              }
+              transition={{
+                duration: 2.6,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="block w-px h-5 bg-[#A58A58]"
+            />
           </a>
         </div>
       </div>

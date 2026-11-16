@@ -1,308 +1,795 @@
-import { useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
-import { motion } from 'motion/react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  ImageIcon,
+  Maximize2,
+  X,
+} from 'lucide-react';
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  type PanInfo,
+} from 'motion/react';
 import {
   PORTFOLIO_COLLECTIONS,
   PORTFOLIO_PROJECTS,
   type CollectionId,
-  type PortfolioCollection,
   type PortfolioProject,
 } from '../data/portfolio';
+import {
+  AnimatedCounter,
+  MagneticButton,
+  ProgressBar,
+  StaggeredText,
+  Tilt3D,
+} from './motion/MotionPrimitives';
 
-type FilterState = 'all' | CollectionId;
-type LayoutMode = 'horizontal' | 'editorial';
+const STACK_OFFSETS = [
+  { x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, zIndex: 30 },
+  { x: 18, y: 10, scale: 0.965, rotate: 1.6, opacity: 0.82, zIndex: 20 },
+  { x: 34, y: 20, scale: 0.93, rotate: 3.1, opacity: 0.56, zIndex: 10 },
+  { x: -16, y: 14, scale: 0.91, rotate: -2.0, opacity: 0.36, zIndex: 5 },
+];
 
-function ProjectEntry({
+function DeckCardContent({
   project,
-  idx,
-  layoutMode,
+  isFront,
+  onOpenZoom,
 }: {
   project: PortfolioProject;
-  idx: number;
-  layoutMode: LayoutMode;
+  isFront: boolean;
+  onOpenZoom?: () => void;
 }) {
   const [imgError, setImgError] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
   const hasLiveUrl = Boolean(project.url && project.url.trim().length > 0);
-  const isAlternatingTall = layoutMode === 'horizontal' && idx % 2 === 1;
+  const hasScreenshot = Boolean(project.heroScreenshot) && !imgError;
+  const hasPreviewVideo = Boolean(project.previewVideo && project.previewVideo.trim().length > 0);
 
-  return (
-    <motion.article
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.6, delay: (idx % 4) * 0.06, ease: [0.16, 1, 0.3, 1] }}
-      className={`group flex flex-col justify-between ${
-        layoutMode === 'horizontal'
-          ? 'snap-start shrink-0 w-[82vw] sm:w-[46vw] lg:w-[34vw] xl:w-[29vw]'
-          : 'w-full'
-      }`}
-    >
-      <div>
-        {/* Presentation Image */}
-        <div
-          className={`relative w-full overflow-hidden bg-[#1A1A1A] ${
-            isAlternatingTall ? 'aspect-[4/4.5]' : 'aspect-[4/3]'
-          }`}
-        >
-          {!imgError ? (
-            <img
-              src={project.image}
-              alt={project.imageAlt}
-              referrerPolicy="no-referrer"
-              loading="lazy"
-              onError={() => setImgError(true)}
-              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
-            />
-          ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-[#1A1A1A]">
-              <span className="text-[11px] tracking-[0.18em] text-[#A58A58] tabular-nums">
-                {project.index}
-              </span>
-              <span className="mt-2 font-serif text-2xl text-[#F2F0EB]">{project.name}</span>
-            </div>
-          )}
-        </div>
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+    if (isFront && hasPreviewVideo && videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  };
 
-        {/* Editorial Portfolio Metadata & Description */}
-        <div className="pt-5 pb-4 border-b border-white/12">
-          <div className="flex items-center justify-between gap-3 text-[11px] tracking-[0.16em] uppercase text-[#A7A49E]">
-            <span>
-              <span className="text-[#A58A58] tabular-nums">{project.index}</span> ·{' '}
-              {project.category}
-            </span>
-            <span>{project.collectionLabel}</span>
-          </div>
-
-          <h4 className="mt-3 font-serif text-2xl sm:text-[1.75rem] font-normal leading-tight text-[#F2F0EB] group-hover:italic transition-all">
-            {project.name}
-          </h4>
-
-          <p className="mt-2.5 text-sm leading-relaxed text-[#A7A49E]">
-            {project.shortDescription}
-          </p>
-        </div>
-      </div>
-
-      {/* Action Link OR In-Development State */}
-      <div className="pt-4">
-        {hasLiveUrl ? (
-          <a
-            href={project.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-between w-full py-2.5 text-[11px] font-medium tracking-[0.16em] uppercase text-[#F2F0EB] hover:text-[#A58A58] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A58A58]"
-          >
-            <span>EXPLORE PROJECT</span>
-            <ArrowUpRight
-              className="w-4 h-4 text-[#A58A58] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              aria-hidden="true"
-            />
-          </a>
-        ) : (
-          <div className="py-2.5 text-[11px] tracking-[0.16em] uppercase text-[#A7A49E]">
-            EM DESENVOLVIMENTO
-          </div>
-        )}
-      </div>
-    </motion.article>
-  );
-}
-
-function CollectionGallery({
-  collection,
-  projects,
-  layoutMode,
-}: {
-  collection: PortfolioCollection;
-  projects: PortfolioProject[];
-  layoutMode: LayoutMode;
-}) {
-  const trackRef = useRef<HTMLDivElement | null>(null);
-
-  const scrollTrack = (direction: 'prev' | 'next') => {
-    const track = trackRef.current;
-    if (!track) return;
-    const distance = Math.max(track.clientWidth * 0.65, 320);
-    track.scrollBy({
-      left: direction === 'next' ? distance : -distance,
-      behavior: 'smooth',
-    });
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+    if (hasPreviewVideo && videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
   };
 
   return (
-    <div>
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10 pb-5 border-b border-white/12">
-        <div>
-          <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-[#A58A58] mb-2 tabular-nums">
-            COLEÇÃO {collection.number} — {collection.subtitle}
-          </p>
-          <h3 className="font-serif text-3xl sm:text-4xl font-normal text-[#F2F0EB]">
-            {collection.title}
-          </h3>
-        </div>
-
-        {layoutMode === 'horizontal' && (
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={() => scrollTrack('prev')}
-              aria-label={`Anterior em ${collection.title}`}
-              className="w-10 h-10 inline-flex items-center justify-center border border-white/15 text-[#F2F0EB] hover:border-[#A58A58] hover:text-[#A58A58] transition-colors cursor-pointer"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollTrack('next')}
-              aria-label={`Próximo em ${collection.title}`}
-              className="w-10 h-10 inline-flex items-center justify-center border border-white/15 text-[#F2F0EB] hover:border-[#A58A58] hover:text-[#A58A58] transition-colors cursor-pointer"
-            >
-              <ArrowRight className="w-4 h-4" />
-            </button>
+    <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className={`flex flex-col h-full bg-[#161616] overflow-hidden transition-colors duration-300 ${
+        isFront
+          ? 'border border-[#A58A58]/40 shadow-[0_28px_70px_rgba(0,0,0,0.72)]'
+          : 'border border-white/15 shadow-[0_18px_45px_rgba(0,0,0,0.55)]'
+      }`}
+    >
+      {/* Main Area: Real Hero Section Screenshot (+ optional real video hover preview & Lightbox trigger) */}
+      <div className="relative w-full aspect-[16/10] bg-[#0D0D0D] border-b border-white/10 overflow-hidden group/media">
+        {hasScreenshot ? (
+          <img
+            src={project.heroScreenshot!}
+            alt={project.screenshotAlt}
+            referrerPolicy="no-referrer"
+            draggable={false}
+            onError={() => setImgError(true)}
+            className={`w-full h-full object-cover object-top select-none transition-transform duration-500 ${
+              isFront ? 'group-hover/media:scale-[1.015]' : ''
+            }`}
+          />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center p-6 sm:p-10 text-center bg-[#121212]">
+            <div className="w-11 h-11 mb-4 flex items-center justify-center border border-[#A58A58]/40 text-[#A58A58]">
+              <ImageIcon className="w-5 h-5" aria-hidden="true" />
+            </div>
+            <p className="text-[11px] font-medium tracking-[0.18em] uppercase text-[#A58A58]">
+              Captura da Hero Pendente
+            </p>
+            <p className="mt-2 font-serif text-xl sm:text-2xl text-[#F2F0EB]">
+              {project.name}
+            </p>
+            <p className="mt-2 max-w-md text-xs leading-relaxed text-[#A7A49E]">
+              Área reservada para inserir o print real da primeira dobra assim que o projeto for
+              publicado.
+            </p>
           </div>
+        )}
+
+        {/* Real video preview layer (renders only when a real previewVideo exists) */}
+        {isFront && hasPreviewVideo && (
+          <video
+            ref={videoRef}
+            src={project.previewVideo!}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+              isHovering ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        )}
+
+        {/* Click-to-zoom Lightbox button on the front card */}
+        {isFront && onOpenZoom && (
+          <button
+            type="button"
+            onClick={onOpenZoom}
+            aria-label={`Ampliar visualização de ${project.name}`}
+            className="absolute inset-0 w-full h-full cursor-zoom-in focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#A58A58]"
+          >
+            <span className="pointer-events-none absolute bottom-3.5 right-3.5 inline-flex items-center gap-2 px-3 py-1.5 bg-[#111111]/85 border border-white/20 text-[10px] font-medium tracking-[0.15em] uppercase text-[#F2F0EB] opacity-0 group-hover/media:opacity-100 transition-opacity duration-200">
+              <Maximize2 className="w-3 h-3 text-[#A58A58]" aria-hidden="true" />
+              <span>Ampliar</span>
+            </span>
+          </button>
         )}
       </div>
 
-      {layoutMode === 'horizontal' ? (
-        <div
-          ref={trackRef}
-          className="editorial-scroll-track flex items-start gap-8 overflow-x-auto pb-6 snap-x snap-mandatory"
-        >
-          {projects.map((project, idx) => (
-            <ProjectEntry key={project.id} project={project} idx={idx} layoutMode="horizontal" />
-          ))}
+      {/* Card Editorial Footer: Category, Project Name, Short Visual Concept & Discrete Action */}
+      <div className="flex-1 p-5 sm:p-6 flex flex-col justify-between gap-4 bg-[#151515]">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 items-start">
+          <div className="md:col-span-5">
+            <p className="text-[10px] sm:text-[11px] font-medium tracking-[0.18em] uppercase text-[#A58A58]">
+              {project.collectionLabel} · {project.category}
+            </p>
+            <h3 className="mt-1 font-serif text-xl sm:text-[1.65rem] font-normal leading-tight text-[#F2F0EB]">
+              {project.name}
+            </h3>
+          </div>
+
+          <div className="md:col-span-7">
+            <p className="text-xs sm:text-sm leading-relaxed text-[#C4C0B8]">
+              {project.visualConcept}
+            </p>
+          </div>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-14">
-          {projects.map((project, idx) => (
-            <ProjectEntry key={project.id} project={project} idx={idx} layoutMode="editorial" />
-          ))}
+
+        <div className="pt-3.5 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+          <span className="text-[11px] tracking-[0.16em] uppercase text-[#A7A49E] tabular-nums">
+            Carta {project.indexInCollection} · Acervo {project.globalNumber} / 08
+          </span>
+
+          {hasLiveUrl ? (
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              tabIndex={isFront ? 0 : -1}
+              onPointerDown={(e) => e.stopPropagation()}
+              className="inline-flex items-center gap-2.5 px-4 sm:px-5 py-2 text-[11px] font-medium tracking-[0.14em] uppercase text-[#F2F0EB] border border-[#A58A58]/60 hover:bg-[#A58A58] hover:text-[#111111] transition-colors duration-150 whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A58A58]"
+            >
+              <span>Explorar projeto</span>
+              <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+            </a>
+          ) : (
+            <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-[#A7A49E]">
+              Projeto em desenvolvimento
+            </span>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
 
-export function PortfolioSection() {
-  const [activeFilter, setActiveFilter] = useState<FilterState>('all');
-  const [layoutMode, setLayoutMode] = useState<LayoutMode>('horizontal');
+function ProjectLightbox({
+  project,
+  onClose,
+  onPrev,
+  onNext,
+  currentIndex,
+  totalInCollection,
+}: {
+  project: PortfolioProject;
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+  currentIndex: number;
+  totalInCollection: number;
+}) {
+  const prefersReduced = useReducedMotion();
+  const hasLiveUrl = Boolean(project.url && project.url.trim().length > 0);
 
-  const visibleCollections =
-    activeFilter === 'all'
-      ? PORTFOLIO_COLLECTIONS
-      : PORTFOLIO_COLLECTIONS.filter((c) => c.id === activeFilter);
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight') onNext();
+      if (e.key === 'ArrowLeft') onPrev();
+    };
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [onClose, onPrev, onNext]);
+
+  return (
+    <motion.div
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Visualização ampliada de ${project.name}`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: prefersReduced ? 0 : 0.25 }}
+      onClick={onClose}
+      className="fixed inset-0 z-50 bg-[#0A0A0A]/92 backdrop-blur-md flex items-center justify-center p-4 sm:p-8"
+    >
+      <motion.div
+        initial={prefersReduced ? { opacity: 1 } : { scale: 0.96, y: 16, opacity: 0 }}
+        animate={{ scale: 1, y: 0, opacity: 1 }}
+        exit={prefersReduced ? { opacity: 0 } : { scale: 0.97, y: 10, opacity: 0 }}
+        transition={{ duration: prefersReduced ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-[1120px] max-h-[92vh] bg-[#141414] border border-[#A58A58]/35 shadow-2xl flex flex-col overflow-hidden"
+      >
+        {/* Top Lightbox Header */}
+        <div className="px-5 sm:px-7 py-4 border-b border-white/10 flex items-center justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-[10px] font-medium tracking-[0.18em] uppercase text-[#A58A58] truncate">
+              {project.collectionLabel} · {project.category} · 0{currentIndex + 1} / 0
+              {totalInCollection}
+            </p>
+            <h3 className="font-serif text-xl sm:text-2xl font-normal text-[#F2F0EB] truncate">
+              {project.name}
+            </h3>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Fechar visualização ampliada"
+            className="w-10 h-10 inline-flex items-center justify-center border border-white/20 text-[#F2F0EB] hover:border-[#A58A58] hover:text-[#A58A58] transition-colors cursor-pointer shrink-0"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Enlarged Visual Stage */}
+        <div className="relative flex-1 min-h-0 bg-[#0D0D0D] overflow-auto flex items-center justify-center p-3 sm:p-6">
+          {project.heroScreenshot ? (
+            <img
+              src={project.heroScreenshot}
+              alt={project.screenshotAlt}
+              className="w-full max-h-[64vh] object-contain"
+            />
+          ) : (
+            <div className="py-16 px-6 text-center max-w-md">
+              <div className="w-12 h-12 mx-auto mb-4 flex items-center justify-center border border-[#A58A58]/40 text-[#A58A58]">
+                <ImageIcon className="w-5 h-5" aria-hidden="true" />
+              </div>
+              <p className="text-[11px] font-medium tracking-[0.18em] uppercase text-[#A58A58]">
+                Captura da Hero Pendente
+              </p>
+              <p className="mt-2 font-serif text-2xl text-[#F2F0EB]">{project.name}</p>
+              <p className="mt-2 text-xs leading-relaxed text-[#A7A49E]">
+                Área reservada para inserir o print real da primeira dobra assim que o projeto for
+                publicado.
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Bottom Lightbox Footer & Controls */}
+        <div className="px-5 sm:px-7 py-4 border-t border-white/10 bg-[#151515] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <p className="text-xs sm:text-sm text-[#C4C0B8] max-w-2xl">{project.visualConcept}</p>
+
+          <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={onPrev}
+                aria-label="Projeto anterior no zoom"
+                className="w-9 h-9 inline-flex items-center justify-center border border-white/20 text-[#F2F0EB] hover:border-[#A58A58] hover:text-[#A58A58] transition-colors cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={onNext}
+                aria-label="Próximo projeto no zoom"
+                className="w-9 h-9 inline-flex items-center justify-center border border-white/20 text-[#F2F0EB] hover:border-[#A58A58] hover:text-[#A58A58] transition-colors cursor-pointer"
+              >
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+
+            {hasLiveUrl ? (
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 text-[11px] font-medium tracking-[0.14em] uppercase text-[#111111] bg-[#F2F0EB] hover:bg-[#A58A58] transition-colors whitespace-nowrap"
+              >
+                <span>Explorar projeto</span>
+                <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+              </a>
+            ) : (
+              <span className="text-[11px] font-medium tracking-[0.14em] uppercase text-[#A7A49E]">
+                Projeto em desenvolvimento
+              </span>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+export function PortfolioSection() {
+  const [activeCollection, setActiveCollection] = useState<CollectionId>('creator-pro');
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  const prefersReduced = useReducedMotion();
+  const dragMovedRef = useRef(false);
+
+  // Horizontal Drag Slider state (mouse drag-to-scroll + touch swipe)
+  const sliderRef = useRef<HTMLDivElement | null>(null);
+  const sliderDragRef = useRef({ isDown: false, startX: 0, scrollLeft: 0, moved: false });
+  const [isDraggingSlider, setIsDraggingSlider] = useState(false);
+
+  const collectionProjects = PORTFOLIO_PROJECTS.filter(
+    (project) => project.collection === activeCollection,
+  );
+  const totalInCollection = collectionProjects.length;
+  const safeIndex = activeIndex % totalInCollection;
+  const activeProject = collectionProjects[safeIndex];
+  const currentCollectionInfo = PORTFOLIO_COLLECTIONS.find((c) => c.id === activeCollection)!;
+
+  const handleCollectionChange = (collectionId: CollectionId) => {
+    if (collectionId === activeCollection) return;
+    setDirection(1);
+    setActiveCollection(collectionId);
+    setActiveIndex(0);
+  };
+
+  const goNext = useCallback(() => {
+    setDirection(1);
+    setActiveIndex((prev) => (prev + 1) % totalInCollection);
+  }, [totalInCollection]);
+
+  const goPrev = useCallback(() => {
+    setDirection(-1);
+    setActiveIndex((prev) => (prev - 1 + totalInCollection) % totalInCollection);
+  }, [totalInCollection]);
+
+  const goToIndex = (targetIdx: number) => {
+    if (targetIdx === safeIndex) return;
+    setDirection(targetIdx > safeIndex ? 1 : -1);
+    setActiveIndex(targetIdx);
+  };
+
+  const handleDragStart = () => {
+    dragMovedRef.current = true;
+  };
+
+  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    setTimeout(() => {
+      dragMovedRef.current = false;
+    }, 120);
+
+    if (info.offset.x < -55 || info.velocity.x < -300) {
+      goNext();
+    } else if (info.offset.x > 55 || info.velocity.x > 300) {
+      goPrev();
+    }
+  };
+
+  const handleOpenLightbox = () => {
+    if (dragMovedRef.current) return;
+    setLightboxOpen(true);
+  };
+
+  // Horizontal drag slider pointer handlers for smooth desktop mouse dragging
+  const handleSliderMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!sliderRef.current) return;
+    sliderDragRef.current = {
+      isDown: true,
+      startX: e.pageX - sliderRef.current.offsetLeft,
+      scrollLeft: sliderRef.current.scrollLeft,
+      moved: false,
+    };
+    setIsDraggingSlider(true);
+  };
+
+  const handleSliderMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!sliderDragRef.current.isDown || !sliderRef.current) return;
+    const x = e.pageX - sliderRef.current.offsetLeft;
+    const walk = x - sliderDragRef.current.startX;
+    if (Math.abs(walk) > 6) {
+      sliderDragRef.current.moved = true;
+    }
+    sliderRef.current.scrollLeft = sliderDragRef.current.scrollLeft - walk;
+  };
+
+  const stopSliderDrag = () => {
+    sliderDragRef.current.isDown = false;
+    setIsDraggingSlider(false);
+    setTimeout(() => {
+      sliderDragRef.current.moved = false;
+    }, 80);
+  };
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (lightboxOpen) return;
+      const section = document.getElementById('portfolio');
+      if (!section) return;
+      const rect = section.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight * 0.7 && rect.bottom > window.innerHeight * 0.3;
+      if (!inView) return;
+
+      if (e.key === 'ArrowRight') goNext();
+      if (e.key === 'ArrowLeft') goPrev();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [goNext, goPrev, lightboxOpen]);
 
   return (
     <section
       id="portfolio"
-      className="relative py-28 sm:py-36 lg:py-44 bg-[#111111] text-[#F2F0EB]"
+      className="relative py-20 sm:py-28 lg:py-32 bg-[#111111] text-[#F2F0EB] overflow-x-clip"
     >
       <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
-        {/* Section Header + Minimalist Filters */}
-        <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 pb-14 border-b border-white/12">
-          <div className="max-w-2xl">
-            <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-[#A58A58] mb-5">
-              04 — Selected Works
+        {/* Abertura Editorial */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-end pb-9 border-b border-white/12">
+          <div className="lg:col-span-7">
+            <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-[#A58A58] mb-4">
+              Projetos / Creator Experiences
             </p>
-            <h2 className="font-serif text-[clamp(2.3rem,4.2vw,4rem)] font-normal leading-[1.03] tracking-[-0.025em] text-[#F2F0EB] [text-wrap:balance]">
-              Experiências criadas para{' '}
-              <span className="italic">diferentes universos.</span>
+            <h2 className="font-serif text-[clamp(2rem,3.8vw,3.6rem)] font-normal leading-[1.04] tracking-[-0.02em] text-[#F2F0EB] [text-wrap:balance]">
+              <StaggeredText
+                stagger={0.045}
+                segments={[
+                  { text: 'Projetos que traduzem influência em ' },
+                  { text: 'presença digital.', italic: true },
+                ]}
+              />
             </h2>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4">
-            <div
-              role="tablist"
-              aria-label="Filtrar coleções"
-              className="inline-flex flex-wrap items-center gap-1 p-1 border border-white/15"
-            >
-              <button
-                type="button"
-                role="tab"
-                aria-selected={activeFilter === 'all'}
-                onClick={() => setActiveFilter('all')}
-                className={`px-3.5 py-2 text-[11px] font-medium tracking-[0.12em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                  activeFilter === 'all'
-                    ? 'bg-[#F2F0EB] text-[#111111]'
-                    : 'text-[#A7A49E] hover:text-[#F2F0EB]'
-                }`}
-              >
-                Todas
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={activeFilter === 'creator-pro'}
-                onClick={() => setActiveFilter('creator-pro')}
-                className={`px-3.5 py-2 text-[11px] font-medium tracking-[0.12em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                  activeFilter === 'creator-pro'
-                    ? 'bg-[#F2F0EB] text-[#111111]'
-                    : 'text-[#A7A49E] hover:text-[#F2F0EB]'
-                }`}
-              >
-                01 · Creator Pro
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={activeFilter === 'creator-pro-experience'}
-                onClick={() => setActiveFilter('creator-pro-experience')}
-                className={`px-3.5 py-2 text-[11px] font-medium tracking-[0.12em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                  activeFilter === 'creator-pro-experience'
-                    ? 'bg-[#F2F0EB] text-[#111111]'
-                    : 'text-[#A7A49E] hover:text-[#F2F0EB]'
-                }`}
-              >
-                02 · Experience
-              </button>
+          <div className="lg:col-span-5">
+            <p className="text-sm sm:text-base leading-relaxed text-[#A7A49E] max-w-md lg:ml-auto">
+              Cada projeto representa uma identidade digital desenvolvida sob medida para o perfil,
+              o território criativo e os objetivos de um criador.
+            </p>
+          </div>
+        </div>
+
+        {/* Seleção Discreta de Coleções + Indicador de Posição */}
+        <div className="mt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+          <div
+            role="tablist"
+            aria-label="Selecionar coleção de projetos"
+            className="inline-flex items-center gap-6 sm:gap-10 border-b border-white/10 pb-3"
+          >
+            {PORTFOLIO_COLLECTIONS.map((col) => {
+              const isSelected = activeCollection === col.id;
+              return (
+                <button
+                  key={col.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isSelected}
+                  onClick={() => handleCollectionChange(col.id)}
+                  className={`relative pb-1 text-left transition-colors cursor-pointer whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A58A58] ${
+                    isSelected ? 'text-[#F2F0EB]' : 'text-[#A7A49E] hover:text-[#F2F0EB]'
+                  }`}
+                >
+                  <span className="text-xs sm:text-sm font-medium tracking-[0.14em] uppercase">
+                    {col.title}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className={`absolute left-0 right-0 -bottom-[13px] h-[1.5px] bg-[#A58A58] transition-transform duration-200 origin-left ${
+                      isSelected ? 'scale-x-100' : 'scale-x-0'
+                    }`}
+                  />
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="flex items-center justify-between sm:justify-end gap-5 text-xs tracking-[0.16em] uppercase text-[#A7A49E]">
+            <span>{currentCollectionInfo.subtitle}</span>
+            <span className="text-[#A58A58] font-medium tabular-nums whitespace-nowrap shrink-0">
+              <AnimatedCounter
+                value={Number(activeProject.globalNumber)}
+                padLength={2}
+                duration={550}
+              />{' '}
+              / 08
+            </span>
+          </div>
+        </div>
+
+        {/* Baralho Interativo */}
+        <div className="mt-10 sm:mt-12">
+          <div className="relative mx-auto max-w-[960px]">
+            {/* Deck Stack Stage (identical card width for front & stacked cards) */}
+            <div className="relative mx-auto w-full max-w-[740px] pb-6">
+              {/* Background stacked cards behind the protagonist */}
+              {collectionProjects.map((project, idx) => {
+                const relativeOffset = (idx - safeIndex + totalInCollection) % totalInCollection;
+                if (relativeOffset === 0) return null;
+                const slot = STACK_OFFSETS[Math.min(relativeOffset, STACK_OFFSETS.length - 1)];
+
+                return (
+                  <motion.div
+                    key={project.id}
+                    onClick={() => goToIndex(idx)}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Selecionar ${project.name}`}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        goToIndex(idx);
+                      }
+                    }}
+                    animate={
+                      prefersReduced
+                        ? { x: slot.x * 0.5, y: slot.y * 0.5, scale: slot.scale, opacity: slot.opacity }
+                        : {
+                            x: slot.x,
+                            y: slot.y,
+                            scale: slot.scale,
+                            rotate: slot.rotate,
+                            opacity: slot.opacity,
+                          }
+                    }
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                    style={{ zIndex: slot.zIndex }}
+                    className="absolute inset-x-0 top-0 cursor-pointer select-none"
+                  >
+                    <div className="pointer-events-none brightness-[0.62]">
+                      <DeckCardContent project={project} isFront={false} />
+                    </div>
+                  </motion.div>
+                );
+              })}
+
+              {/* Front Protagonist Card (draggable & 3D pointer tilt on mouse) */}
+              <AnimatePresence mode="popLayout" custom={direction} initial={false}>
+                <motion.div
+                  key={activeProject.id}
+                  custom={direction}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.38}
+                  onDragStart={handleDragStart}
+                  onDragEnd={handleDragEnd}
+                  initial={
+                    prefersReduced
+                      ? { opacity: 0 }
+                      : {
+                          x: direction * 90,
+                          y: 12,
+                          scale: 0.96,
+                          rotate: direction * 2.5,
+                          opacity: 0,
+                        }
+                  }
+                  animate={{
+                    x: 0,
+                    y: 0,
+                    scale: 1,
+                    rotate: 0,
+                    opacity: 1,
+                  }}
+                  exit={
+                    prefersReduced
+                      ? { opacity: 0 }
+                      : {
+                          x: direction * -160,
+                          y: 18,
+                          scale: 0.94,
+                          rotate: direction * -5,
+                          opacity: 0,
+                        }
+                  }
+                  transition={{
+                    duration: 0.42,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  style={{ zIndex: 30 }}
+                  className="relative w-full cursor-grab active:cursor-grabbing touch-pan-y"
+                >
+                  <Tilt3D maxTilt={2.6}>
+                    <DeckCardContent
+                      project={activeProject}
+                      isFront={true}
+                      onOpenZoom={handleOpenLightbox}
+                    />
+                  </Tilt3D>
+                </motion.div>
+              </AnimatePresence>
             </div>
 
-            <div
-              role="group"
-              aria-label="Modo de exibição"
-              className="inline-flex items-center gap-1 p-1 border border-white/15"
-            >
-              <button
-                type="button"
-                onClick={() => setLayoutMode('horizontal')}
-                className={`px-3 py-2 text-[11px] font-medium tracking-[0.12em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                  layoutMode === 'horizontal'
-                    ? 'bg-[#A58A58] text-[#111111]'
-                    : 'text-[#A7A49E] hover:text-[#F2F0EB]'
+            {/* Deck Navigation Controls + Progress Bar */}
+            <div className="mt-6 sm:mt-8 space-y-5">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-5">
+                {/* Left/Right Navigation Arrows + Position Counter */}
+                <div className="flex items-center gap-4 shrink-0">
+                  <button
+                    type="button"
+                    onClick={goPrev}
+                    aria-label="Carta anterior"
+                    className="w-11 h-11 inline-flex items-center justify-center border border-white/20 text-[#F2F0EB] hover:border-[#A58A58] hover:text-[#A58A58] transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-[#A58A58]"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                  </button>
+
+                  <span className="text-xs font-medium tracking-[0.18em] text-[#F2F0EB] tabular-nums min-w-[60px] text-center whitespace-nowrap">
+                    <AnimatedCounter value={safeIndex + 1} padLength={2} duration={400} /> / 0
+                    {totalInCollection}
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={goNext}
+                    aria-label="Próxima carta"
+                    className="w-11 h-11 inline-flex items-center justify-center border border-white/20 text-[#F2F0EB] hover:border-[#A58A58] hover:text-[#A58A58] transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-[#A58A58]"
+                  >
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* Direct Card Selectors inside the Active Collection */}
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  {collectionProjects.map((proj, idx) => {
+                    const isCurrent = idx === safeIndex;
+                    return (
+                      <button
+                        key={proj.id}
+                        type="button"
+                        onClick={() => goToIndex(idx)}
+                        className={`px-3 py-1.5 text-[11px] font-medium tracking-[0.12em] uppercase border transition-colors cursor-pointer whitespace-nowrap ${
+                          isCurrent
+                            ? 'border-[#A58A58] text-[#111111] bg-[#A58A58]'
+                            : 'border-white/12 text-[#A7A49E] hover:border-white/35 hover:text-[#F2F0EB]'
+                        }`}
+                      >
+                        {proj.indexInCollection} · {proj.category}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <span className="hidden lg:inline text-[11px] tracking-[0.14em] uppercase text-[#A7A49E] whitespace-nowrap shrink-0">
+                  Arraste ou use as setas
+                </span>
+              </div>
+
+              <ProgressBar
+                progress={((safeIndex + 1) / totalInCollection) * 100}
+                trackClassName="bg-white/10"
+                fillClassName="bg-[#A58A58]"
+              />
+            </div>
+
+            {/* Horizontal Drag Slider Gallery Strip (mouse & touch draggable thumbnail index) */}
+            <div className="mt-8 pt-6 border-t border-white/10">
+              <div className="mb-3 flex items-center justify-between text-[10px] tracking-[0.18em] uppercase text-[#A7A49E]">
+                <span>Galeria Horizontal · {currentCollectionInfo.title}</span>
+                <span>Arraste ou toque para selecionar</span>
+              </div>
+
+              <div
+                ref={sliderRef}
+                onMouseDown={handleSliderMouseDown}
+                onMouseMove={handleSliderMouseMove}
+                onMouseUp={stopSliderDrag}
+                onMouseLeave={stopSliderDrag}
+                className={`editorial-scroll-track flex gap-3.5 overflow-x-auto pb-2 select-none touch-pan-x ${
+                  isDraggingSlider ? 'cursor-grabbing' : 'cursor-grab'
                 }`}
               >
-                Galeria
-              </button>
-              <button
-                type="button"
-                onClick={() => setLayoutMode('editorial')}
-                className={`px-3 py-2 text-[11px] font-medium tracking-[0.12em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                  layoutMode === 'editorial'
-                    ? 'bg-[#A58A58] text-[#111111]'
-                    : 'text-[#A7A49E] hover:text-[#F2F0EB]'
-                }`}
-              >
-                Grade
-              </button>
+                {collectionProjects.map((proj, idx) => {
+                  const isCurrent = idx === safeIndex;
+                  return (
+                    <button
+                      key={proj.id}
+                      type="button"
+                      onClick={() => {
+                        if (sliderDragRef.current.moved) return;
+                        goToIndex(idx);
+                      }}
+                      className={`group/thumb shrink-0 w-[210px] sm:w-[225px] text-left border transition-all duration-300 cursor-pointer bg-[#151515] ${
+                        isCurrent
+                          ? 'border-[#A58A58]'
+                          : 'border-white/12 hover:border-white/35'
+                      }`}
+                    >
+                      <div className="aspect-[16/10] w-full overflow-hidden bg-[#0D0D0D]">
+                        {proj.heroScreenshot ? (
+                          <img
+                            src={proj.heroScreenshot}
+                            alt={proj.screenshotAlt}
+                            draggable={false}
+                            loading="lazy"
+                            className={`w-full h-full object-cover object-top transition-all duration-300 ${
+                              isCurrent
+                                ? 'grayscale-0 opacity-100'
+                                : 'grayscale opacity-70 group-hover/thumb:grayscale-0 group-hover/thumb:opacity-100 group-hover/thumb:scale-[1.03]'
+                            }`}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center px-3 text-center">
+                            <span className="text-[10px] tracking-[0.16em] uppercase text-[#A58A58]/80">
+                              Captura Pendente
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="px-3 py-2.5 flex items-center justify-between gap-2">
+                        <span className="text-[11px] font-medium text-[#F2F0EB] truncate">
+                          {proj.name}
+                        </span>
+                        <span className="text-[10px] tracking-[0.14em] text-[#A58A58] tabular-nums shrink-0">
+                          {proj.indexInCollection}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Collections */}
-        <div className="mt-16 space-y-24">
-          {visibleCollections.map((collection) => {
-            const projects = PORTFOLIO_PROJECTS.filter((p) => p.collection === collection.id);
-            return (
-              <CollectionGallery
-                key={collection.id}
-                collection={collection}
-                projects={projects}
-                layoutMode={layoutMode}
-              />
-            );
-          })}
+        {/* Encerramento Comercial da Seção */}
+        <div className="mt-16 sm:mt-20 pt-10 border-t border-white/12 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <h3 className="font-serif text-2xl sm:text-4xl font-normal text-[#F2F0EB]">
+            Seu próximo projeto pode{' '}
+            <span className="italic text-[#A58A58]">começar aqui.</span>
+          </h3>
+
+          <MagneticButton>
+            <a
+              href="#contato"
+              className="inline-flex items-center gap-3 px-6 py-3.5 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#111111] bg-[#F2F0EB] hover:bg-[#A58A58] transition-colors duration-150 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A58A58]"
+            >
+              <span>Desenvolver minha presença digital</span>
+              <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+            </a>
+          </MagneticButton>
         </div>
       </div>
+
+      {/* Lightbox / Modal Zoom */}
+      <AnimatePresence>
+        {lightboxOpen && (
+          <ProjectLightbox
+            project={activeProject}
+            onClose={() => setLightboxOpen(false)}
+            onPrev={goPrev}
+            onNext={goNext}
+            currentIndex={safeIndex}
+            totalInCollection={totalInCollection}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

@@ -1,11 +1,19 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { PRACTICE_AREAS } from '../data/studio';
+import {
+  AnimatedCounter,
+  ProgressBar,
+  StaggeredText,
+  Tilt3D,
+} from './motion/MotionPrimitives';
 
 export function PracticeSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
+  const prefersReduced = useReducedMotion();
   const activeArea = PRACTICE_AREAS[activeIndex];
+  const progressPercent = ((activeIndex + 1) / PRACTICE_AREAS.length) * 100;
 
   return (
     <section
@@ -19,8 +27,14 @@ export function PracticeSection() {
               03 — O Que Fazemos
             </p>
             <h2 className="font-serif text-[clamp(2.2rem,4vw,3.75rem)] font-normal leading-[1.05] tracking-[-0.02em] text-[#111111] [text-wrap:balance]">
-              Quatro frentes de atuação em{' '}
-              <span className="italic">arquitetura digital</span>.
+              <StaggeredText
+                stagger={0.045}
+                segments={[
+                  { text: 'Quatro frentes de atuação em ' },
+                  { text: 'arquitetura digital', italic: true },
+                  { text: '.' },
+                ]}
+              />
             </h2>
           </div>
           <div className="lg:col-span-5 lg:text-right">
@@ -50,7 +64,11 @@ export function PracticeSection() {
                         isActive ? 'text-[#A58A58]' : 'text-[#A7A49E]'
                       }`}
                     >
-                      {area.index}
+                      <AnimatedCounter
+                        value={idx + 1}
+                        padLength={2}
+                        duration={650 + idx * 120}
+                      />
                     </span>
 
                     <div className="sm:col-span-10">
@@ -66,6 +84,13 @@ export function PracticeSection() {
                       <p className="mt-3 text-sm sm:text-base leading-relaxed text-[#5C5A55] max-w-xl">
                         {area.description}
                       </p>
+                      <div className="mt-5 max-w-xs">
+                        <ProgressBar
+                          progress={isActive ? 100 : 18}
+                          trackClassName="bg-[#111111]/8"
+                          fillClassName={isActive ? 'bg-[#A58A58]' : 'bg-[#111111]/20'}
+                        />
+                      </div>
                     </div>
                   </div>
                 </button>
@@ -73,37 +98,50 @@ export function PracticeSection() {
             })}
           </div>
 
-          {/* Right: Editorial Preview Frame */}
+          {/* Right: Interactive 3D Tilt Editorial Preview Frame */}
           <div className="lg:col-span-5 lg:sticky lg:top-24 pt-2">
-            <div className="relative aspect-[3/4] overflow-hidden bg-[#E5E2DC]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeArea.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="w-full h-full"
-                >
-                  {!imgErrors[activeArea.id] ? (
-                    <img
-                      src={activeArea.image}
-                      alt={activeArea.imageAlt}
-                      referrerPolicy="no-referrer"
-                      onError={() =>
-                        setImgErrors((prev) => ({ ...prev, [activeArea.id]: true }))
-                      }
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-[#E5E2DC]" />
-                  )}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-            <div className="mt-3 flex items-center justify-between text-[11px] tracking-[0.14em] uppercase text-[#A7A49E]">
-              <span className="text-[#111111]">{activeArea.title}</span>
-              <span className="tabular-nums text-[#A58A58]">{activeArea.index} / 04</span>
+            <Tilt3D maxTilt={3.2}>
+              <div className="relative aspect-[3/4] overflow-hidden bg-[#E5E2DC]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeArea.id}
+                    initial={prefersReduced ? { opacity: 0 } : { opacity: 0, scale: 1.03 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={prefersReduced ? { opacity: 0 } : { opacity: 0 }}
+                    transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+                    className="w-full h-full"
+                  >
+                    {!imgErrors[activeArea.id] ? (
+                      <img
+                        src={activeArea.image}
+                        alt={activeArea.imageAlt}
+                        referrerPolicy="no-referrer"
+                        onError={() =>
+                          setImgErrors((prev) => ({ ...prev, [activeArea.id]: true }))
+                        }
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-[#E5E2DC]" />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </Tilt3D>
+
+            <div className="mt-3 space-y-2">
+              <div className="flex items-center justify-between text-[11px] tracking-[0.14em] uppercase text-[#A7A49E]">
+                <span className="text-[#111111]">{activeArea.title}</span>
+                <span className="tabular-nums text-[#A58A58]">
+                  <AnimatedCounter value={activeIndex + 1} padLength={2} duration={450} /> /{' '}
+                  <AnimatedCounter value={PRACTICE_AREAS.length} padLength={2} duration={700} />
+                </span>
+              </div>
+              <ProgressBar
+                progress={progressPercent}
+                trackClassName="bg-[#111111]/10"
+                fillClassName="bg-[#A58A58]"
+              />
             </div>
           </div>
         </div>

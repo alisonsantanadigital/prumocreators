@@ -2,7 +2,7 @@ import { PrumoMark } from './PrumoMark';
 
 export function Footer() {
   return (
-    <footer className="bg-[#111111] text-[#F2F0EB] border-t border-white/10 py-14">
+    <footer className="bg-[#111111] text-[#F2F0EB] border-t border-white/10 pt-14 pb-24 md:py-14">
       <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
         <div className="flex items-center gap-4">
           <PrumoMark className="w-5 h-8 text-[#F2F0EB] shrink-0" />

@@ -1,24 +1,31 @@
-import lifestyleImg from '../assets/images/lifestyle_livia_martins_1794799600925.jpg';
-import fashionImg from '../assets/images/fashion_marina_costa_1794799601160.jpg';
-import beautyImg from '../assets/images/beauty_isabela_rocha_1794799601158.jpg';
-import fitnessImg from '../assets/images/fitness_camila_mendes_1794799602039.jpg';
-import realityFlowImg from '../assets/images/reality_flow_editorial_1794799602185.jpg';
-import digitalCoutureImg from '../assets/images/digital_couture_editorial_1794799602225.jpg';
-import beautyverseImg from '../assets/images/beautyverse_editorial_1794799602516.jpg';
-import humanPerformanceImg from '../assets/images/human_performance_editorial_1794799602848.jpg';
+import lifestyleHeroShot from '../assets/screenshots/lifestyle.png';
+import fashionHeroShot from '../assets/screenshots/fashion.png';
+import beautyHeroShot from '../assets/screenshots/beauty.png';
+import fitnessHeroShot from '../assets/screenshots/fitness.png';
+import realityFlowHeroShot from '../assets/screenshots/reality-flow.png';
 
 export type CollectionId = 'creator-pro' | 'creator-pro-experience';
 
 export interface PortfolioProject {
   id: string;
-  index: string;
+  globalNumber: string;
+  indexInCollection: string;
   collection: CollectionId;
   collectionLabel: string;
   name: string;
   category: string;
-  shortDescription: string;
-  image: string;
-  imageAlt: string;
+  visualConcept: string;
+  /**
+   * Print real da Hero Section (primeira dobra) do site correspondente.
+   * Mantenha null quando o projeto ainda não tiver captura disponível.
+   */
+  heroScreenshot: string | null;
+  screenshotAlt: string;
+  /**
+   * Prévia de vídeo real para exibição no hover sobre o projeto.
+   * Mantenha null quando não houver vídeo real disponível.
+   */
+  previewVideo?: string | null;
   /**
    * Endereço publicado do projeto individual.
    * Mantenha string vazia ("") para projetos ainda sem URL configurada.
@@ -38,126 +45,136 @@ export const PORTFOLIO_COLLECTIONS: PortfolioCollection[] = [
     id: 'creator-pro',
     number: '01',
     title: 'Creator Pro',
-    subtitle: 'Apresentações digitais profissionais',
+    subtitle: 'Apresentações comerciais para criadores de conteúdo',
   },
   {
     id: 'creator-pro-experience',
     number: '02',
     title: 'Creator Pro Experience',
-    subtitle: 'Experiências digitais com direção de arte autoral',
+    subtitle: 'Experiências digitais imersivas com direção de arte autoral',
   },
 ];
 
 /**
- * Configuração centralizada de links dos oito projetos do portfólio.
- * Para ativar um projeto em desenvolvimento, preencha o campo `url` com o link publicado.
+ * Configuração centralizada dos oito projetos do portfólio Prumo Creators.
+ * - `heroScreenshot`: captura real da primeira dobra (Hero) do site publicado.
+ * - `url`: endereço publicado que será aberto em nova aba pelo botão "Explorar projeto".
  */
 export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
   // COLEÇÃO 01 — CREATOR PRO
   {
     id: 'creator-pro-lifestyle',
-    index: '01',
+    globalNumber: '01',
+    indexInCollection: '01',
     collection: 'creator-pro',
     collectionLabel: 'Creator Pro',
     name: 'Lifestyle — Lívia Martins',
     category: 'Lifestyle',
-    shortDescription:
-      'Apresentação comercial editorial estruturada para rotina, hospitalidade e parcerias de marca.',
-    image: lifestyleImg,
-    imageAlt: 'Lifestyle — Lívia Martins em ambiente arquitetônico contemporâneo',
+    visualConcept:
+      'Editorial luminoso em tons de marfim e linho, equilibrando proximidade natural e sofisticação comercial.',
+    heroScreenshot: lifestyleHeroShot,
+    screenshotAlt: 'Print real da Hero Section do projeto Lifestyle — Lívia Martins',
     url: 'https://creator-pro-lifestyle.vercel.app/',
   },
   {
     id: 'creator-pro-fashion',
-    index: '02',
+    globalNumber: '02',
+    indexInCollection: '02',
     collection: 'creator-pro',
     collectionLabel: 'Creator Pro',
     name: 'Fashion — Marina Costa',
     category: 'Fashion',
-    shortDescription:
-      'Direção estética e posicionamento comercial para campanhas de moda e colaborações autorais.',
-    image: fashionImg,
-    imageAlt: 'Fashion — Marina Costa em arquitetura brutalista minimalista',
+    visualConcept:
+      'Contraste editorial minimalista em concreto e alfaiataria escura para posicionamento de moda contemporânea.',
+    heroScreenshot: fashionHeroShot,
+    screenshotAlt: 'Print real da Hero Section do projeto Fashion — Marina Costa',
     url: 'https://creator-pro-fashion.vercel.app/',
   },
   {
     id: 'creator-pro-beauty',
-    index: '03',
+    globalNumber: '03',
+    indexInCollection: '03',
     collection: 'creator-pro',
     collectionLabel: 'Creator Pro',
     name: 'Beauty — Isabela Rocha',
     category: 'Beauty',
-    shortDescription:
-      'Arquitetura comercial desenhada para autoridade em skincare, perfumaria e campanhas de beleza.',
-    image: beautyImg,
-    imageAlt: 'Beauty — Isabela Rocha em retrato editorial de estúdio',
+    visualConcept:
+      'Composição clara e delicada com tipografia serifada e foco em autoridade estética para beleza e skincare.',
+    heroScreenshot: beautyHeroShot,
+    screenshotAlt: 'Print real da Hero Section do projeto Beauty — Isabela Rocha',
     url: 'https://creator-pro-beauty.vercel.app/',
   },
   {
     id: 'creator-pro-fitness',
-    index: '04',
+    globalNumber: '04',
+    indexInCollection: '04',
     collection: 'creator-pro',
     collectionLabel: 'Creator Pro',
     name: 'Fitness — Camila Mendes',
     category: 'Fitness',
-    shortDescription:
-      'Posicionamento estratégico para performance atlética, bem-estar e marcas esportivas.',
-    image: fitnessImg,
-    imageAlt: 'Fitness — Camila Mendes em cena atlética de estúdio arquitetônico',
+    visualConcept:
+      'Direção escura de alto impacto com acento oliva e estrutura orientada à performance e bem-estar.',
+    heroScreenshot: fitnessHeroShot,
+    screenshotAlt: 'Print real da Hero Section do projeto Fitness — Camila Mendes',
     url: 'https://creator-pro-fitness.vercel.app/',
   },
 
   // COLEÇÃO 02 — CREATOR PRO EXPERIENCE
   {
     id: 'experience-reality-flow',
-    index: '01',
+    globalNumber: '05',
+    indexInCollection: '01',
     collection: 'creator-pro-experience',
     collectionLabel: 'Creator Pro Experience',
-    name: 'Reality Flow — Lifestyle',
+    name: 'Lifestyle — Reality Flow',
     category: 'Lifestyle',
-    shortDescription:
-      'Experiência digital contínua com narrativa visual fluida e direção editorial contemporânea.',
-    image: realityFlowImg,
-    imageAlt: 'Reality Flow — Lifestyle em terraço mediterrâneo sob luz natural',
+    visualConcept:
+      'Experiência cinematográfica em tela cheia com atmosfera arquitetônica e narrativa sensorial contínua.',
+    heroScreenshot: realityFlowHeroShot,
+    screenshotAlt: 'Print real da Hero Section do projeto Lifestyle — Reality Flow',
     url: 'https://prumo-creators-creator-pro-experien.vercel.app/',
   },
   {
     id: 'experience-digital-couture',
-    index: '02',
+    globalNumber: '06',
+    indexInCollection: '02',
     collection: 'creator-pro-experience',
     collectionLabel: 'Creator Pro Experience',
-    name: 'Digital Couture — Fashion',
+    name: 'Fashion — Digital Couture',
     category: 'Fashion',
-    shortDescription:
-      'Editorial interativo de alta moda onde silhueta, ritmo visual e arquitetura definem o discurso.',
-    image: digitalCoutureImg,
-    imageAlt: 'Digital Couture — Fashion em vestido plissado escultural',
+    visualConcept:
+      'Passarela digital autoral desenhada para destacar silhueta, movimento têxtil e direção de moda.',
+    heroScreenshot: null,
+    screenshotAlt: 'Área preparada para captura real da Hero Section de Fashion — Digital Couture',
     url: '',
   },
   {
     id: 'experience-beautyverse',
-    index: '03',
+    globalNumber: '07',
+    indexInCollection: '03',
     collection: 'creator-pro-experience',
     collectionLabel: 'Creator Pro Experience',
-    name: 'Beautyverse — Beauty',
+    name: 'Beauty — Beautyverse',
     category: 'Beauty',
-    shortDescription:
-      'Ambiente sensorial digital dedicado a texturas, luz natural e estética editorial de beleza.',
-    image: beautyverseImg,
-    imageAlt: 'Beautyverse — Beauty em composição minimalista sobre calcário',
+    visualConcept:
+      'Narrativa imersiva focada em luz, textura e presença sensorial para lançamentos de beleza.',
+    heroScreenshot: null,
+    screenshotAlt: 'Área preparada para captura real da Hero Section de Beauty — Beautyverse',
     url: '',
   },
   {
     id: 'experience-human-performance',
-    index: '04',
+    globalNumber: '08',
+    indexInCollection: '04',
     collection: 'creator-pro-experience',
     collectionLabel: 'Creator Pro Experience',
-    name: 'Human Performance — Fitness',
+    name: 'Fitness — Human Performance',
     category: 'Fitness',
-    shortDescription:
-      'Experiência visual orientada por movimento, disciplina e linguagem esportiva contemporânea.',
-    image: humanPerformanceImg,
-    imageAlt: 'Human Performance — Fitness em átrio arquitetônico iluminado',
+    visualConcept:
+      'Experiência interativa orientada por ritmo atlético, disciplina e estética esportiva contemporânea.',
+    heroScreenshot: null,
+    screenshotAlt:
+      'Área preparada para captura real da Hero Section de Fitness — Human Performance',
     url: '',
   },
 ];

@@ -1,4 +1,9 @@
 import { PROCESS_STEPS } from '../data/studio';
+import {
+  AnimatedCounter,
+  ProgressBar,
+  StaggeredText,
+} from './motion/MotionPrimitives';
 
 export function ProcessSection() {
   return (
@@ -13,8 +18,13 @@ export function ProcessSection() {
               06 — Processo
             </p>
             <h2 className="font-serif text-[clamp(2.2rem,4vw,3.75rem)] font-normal leading-[1.05] tracking-[-0.02em] text-[#111111] [text-wrap:balance]">
-              Três etapas da identidade à{' '}
-              <span className="italic">apresentação final.</span>
+              <StaggeredText
+                stagger={0.045}
+                segments={[
+                  { text: 'Três etapas da identidade à ' },
+                  { text: 'apresentação final.', italic: true },
+                ]}
+              />
             </h2>
           </div>
           <div className="lg:col-span-5 lg:text-right">
@@ -37,11 +47,22 @@ export function ProcessSection() {
                     : 'md:pl-10 lg:pl-14'
               }`}
             >
-              <div className="flex items-center justify-between mb-8">
-                <span className="text-xs font-medium tracking-[0.18em] text-[#A58A58] tabular-nums">
-                  {step.index}
+              <div className="flex items-center justify-between gap-4 mb-8">
+                <span className="text-xs font-medium tracking-[0.18em] text-[#A58A58] tabular-nums shrink-0">
+                  <AnimatedCounter
+                    value={idx + 1}
+                    padLength={2}
+                    duration={600 + idx * 160}
+                  />
                 </span>
-                <span className="w-8 h-px bg-[#111111]/20" aria-hidden="true" />
+                <div className="w-16">
+                  <ProgressBar
+                    progress={((idx + 1) / PROCESS_STEPS.length) * 100}
+                    trackClassName="bg-[#111111]/12"
+                    fillClassName="bg-[#A58A58]"
+                    delay={0.12 + idx * 0.14}
+                  />
+                </div>
               </div>
 
               <h3 className="font-serif text-3xl sm:text-4xl font-normal tracking-tight text-[#111111]">

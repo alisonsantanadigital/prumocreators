@@ -23,10 +23,22 @@ export interface ProcessStep {
   description: string;
 }
 
+export interface PartnerBrand {
+  id: string;
+  name: string;
+  logoSrc: string;
+  url?: string;
+}
+
 export const STUDIO_MEDIA = {
   heroCampaign: heroCampaignImg,
   heroCampaignAlt:
     'Campanha editorial de moda em galeria arquitetônica brutalista com alfaiataria em preto e cinza mineral',
+  /**
+   * Vídeo curto, real e sem som para reprodução contínua na abertura (Hero).
+   * Preencher somente com arquivo ou URL real e autorizado.
+   */
+  heroVideo: '' as string,
   heroInset: heroInsetImg,
   heroInsetAlt:
     'Detalhe editorial de alfaiataria em lã preta contra parede em pedra travertino',
@@ -40,6 +52,12 @@ export const STUDIO_MEDIA = {
   visionSpreadAlt:
     'Corredor arquitetônico em pedra clara com sombras geométricas e silhueta editorial ao centro',
 };
+
+/**
+ * Marcas reais e autorizadas para a faixa contínua (Infinite Marquee).
+ * Mantenha vazio até que os logotipos oficiais estejam autorizados.
+ */
+export const PARTNER_BRANDS: PartnerBrand[] = [];
 
 export const PRACTICE_AREAS: PracticeArea[] = [
   {

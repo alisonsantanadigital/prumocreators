@@ -1,8 +1,20 @@
 import { useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import { STUDIO_MEDIA } from '../data/studio';
+import {
+  AnimatedCounter,
+  ProgressBar,
+  StaggeredText,
+  useInViewObserver,
+} from './motion/MotionPrimitives';
 
 export function VisionSection() {
   const [imgError, setImgError] = useState(false);
+  const prefersReduced = useReducedMotion();
+  const [spreadRef, spreadInView] = useInViewObserver<HTMLDivElement>({
+    threshold: 0.16,
+    once: true,
+  });
 
   return (
     <section
@@ -17,13 +29,25 @@ export function VisionSection() {
             </p>
 
             <h2 className="font-serif text-[clamp(2.3rem,4.3vw,4rem)] font-normal leading-[1.03] tracking-[-0.025em] text-[#111111] [text-wrap:balance]">
-              Não basta estar presente.{' '}
-              <span className="italic">É preciso ser percebido.</span>
+              <StaggeredText
+                stagger={0.045}
+                segments={[
+                  { text: 'Não basta estar presente. ' },
+                  { text: 'É preciso ser percebido.', italic: true },
+                ]}
+              />
             </h2>
           </div>
 
           <div className="lg:col-span-6 lg:col-start-7 lg:pt-10 space-y-6">
-            <div className="w-12 h-px bg-[#A58A58]" aria-hidden="true" />
+            <div className="w-12">
+              <ProgressBar
+                progress={100}
+                trackClassName="bg-[#111111]/10"
+                fillClassName="bg-[#A58A58]"
+                delay={0.12}
+              />
+            </div>
             <p className="text-base sm:text-xl leading-[1.75] text-[#2A2927]">
               Uma apresentação profissional transforma a maneira como marcas percebem, avaliam e
               se conectam com um criador de conteúdo.
@@ -38,17 +62,24 @@ export function VisionSection() {
         </div>
 
         {/* Large-Scale Asymmetric Editorial Photograph */}
-        <div className="mt-16 sm:mt-20 grid grid-cols-1 lg:grid-cols-12">
+        <div ref={spreadRef} className="mt-16 sm:mt-20 grid grid-cols-1 lg:grid-cols-12">
           <div className="lg:col-span-10 lg:col-start-3">
             <div className="aspect-[16/9] overflow-hidden bg-[#E5E2DC]">
               {!imgError ? (
-                <img
+                <motion.img
                   src={STUDIO_MEDIA.visionSpread}
                   alt={STUDIO_MEDIA.visionSpreadAlt}
                   referrerPolicy="no-referrer"
                   loading="lazy"
                   onError={() => setImgError(true)}
-                  className="w-full h-full object-cover"
+                  initial={prefersReduced ? false : { scale: 1.04, opacity: 0.85 }}
+                  animate={
+                    spreadInView || prefersReduced
+                      ? { scale: 1, opacity: 1 }
+                      : { scale: 1.04, opacity: 0.85 }
+                  }
+                  transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                  className="w-full h-full object-cover will-change-transform"
                 />
               ) : (
                 <div className="w-full h-full bg-[#E5E2DC]" />
@@ -56,7 +87,9 @@ export function VisionSection() {
             </div>
             <div className="mt-3 flex items-center justify-between text-[11px] tracking-[0.14em] uppercase text-[#A7A49E]">
               <span>Percepção · Valor · Conexão</span>
-              <span className="tabular-nums text-[#A58A58]">05</span>
+              <span className="tabular-nums text-[#A58A58]">
+                <AnimatedCounter value={5} padLength={2} duration={650} />
+              </span>
             </div>
           </div>
         </div>

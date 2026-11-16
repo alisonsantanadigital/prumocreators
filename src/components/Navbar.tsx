@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PrumoMark } from './PrumoMark';
+import { MagneticButton } from './motion/MotionPrimitives';
 
 const NAV_ITEMS = [
   { label: 'Manifesto', href: '#manifesto' },
@@ -94,12 +95,16 @@ export function Navbar() {
 
           {/* Zone 3: Primary Action + Mobile Menu Toggle */}
           <div className="flex items-center gap-3 shrink-0">
-            <a
-              href="#contato"
-              className="hidden sm:inline-flex items-center px-4 py-2 text-[11px] font-medium tracking-[0.14em] uppercase text-[#F2F0EB] bg-[#111111] hover:bg-[#A58A58] hover:text-[#111111] transition-colors duration-150 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#111111]"
-            >
-              Contato
-            </a>
+            <div className="hidden sm:block">
+              <MagneticButton strength={4}>
+                <a
+                  href="#contato"
+                  className="inline-flex items-center px-4 py-2 text-[11px] font-medium tracking-[0.14em] uppercase text-[#F2F0EB] bg-[#111111] hover:bg-[#A58A58] hover:text-[#111111] transition-colors duration-150 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#111111]"
+                >
+                  Contato
+                </a>
+              </MagneticButton>
+            </div>
 
             <button
               type="button"

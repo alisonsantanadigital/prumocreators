@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { ArrowUpRight, Check, Mail, MessageSquare } from 'lucide-react';
 import { OFFICIAL_CONTACT_CONFIG, PRACTICE_AREAS } from '../data/studio';
+import { MagneticButton, StaggeredText } from './motion/MotionPrimitives';
 
 export function ContactSection() {
   const [name, setName] = useState('');
@@ -53,8 +54,13 @@ export function ContactSection() {
             </p>
 
             <h2 className="font-serif text-[clamp(2.4rem,4.5vw,4.25rem)] font-normal leading-[1.03] tracking-[-0.025em] text-[#F2F0EB] [text-wrap:balance]">
-              Vamos construir sua{' '}
-              <span className="italic">próxima presença digital?</span>
+              <StaggeredText
+                stagger={0.045}
+                segments={[
+                  { text: 'Vamos construir sua ' },
+                  { text: 'próxima presença digital?', italic: true },
+                ]}
+              />
             </h2>
 
             <p className="mt-6 text-base sm:text-xl leading-relaxed text-[#A7A49E] max-w-lg">
@@ -242,13 +248,15 @@ export function ContactSection() {
                   </div>
 
                   <div className="pt-2 flex flex-wrap items-center justify-between gap-4">
-                    <button
-                      type="submit"
-                      className="inline-flex items-center gap-2.5 px-7 py-3.5 text-[11px] font-semibold tracking-[0.16em] uppercase text-[#111111] bg-[#F2F0EB] hover:bg-[#A58A58] transition-colors duration-150 cursor-pointer"
-                    >
-                      <span>Enviar Solicitação</span>
-                      <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
-                    </button>
+                    <MagneticButton>
+                      <button
+                        type="submit"
+                        className="prumo-cta-glow inline-flex items-center gap-2.5 px-7 py-3.5 text-[11px] font-semibold tracking-[0.16em] uppercase text-[#111111] bg-[#F2F0EB] hover:bg-[#A58A58] transition-colors duration-150 cursor-pointer"
+                      >
+                        <span>Enviar Solicitação</span>
+                        <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                      </button>
+                    </MagneticButton>
 
                     {whatsappHref && (
                       <a
