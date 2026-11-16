@@ -1,11 +1,11 @@
-import lifestyleImg from '../assets/images/lifestyle_livia_martins_1794793899244.jpg';
-import fashionImg from '../assets/images/fashion_marina_costa_1794793899192.jpg';
-import beautyImg from '../assets/images/beauty_isabela_rocha_1794793900434.jpg';
-import fitnessImg from '../assets/images/fitness_camila_mendes_1794793901463.jpg';
-import realityFlowImg from '../assets/images/reality_flow_experience_1794793900908.jpg';
-import digitalCoutureImg from '../assets/images/digital_couture_experience_1794793901682.jpg';
-import beautyverseImg from '../assets/images/beautyverse_experience_preview_1794793903177.jpg';
-import humanPerformanceImg from '../assets/images/human_performance_experience_1794793903735.jpg';
+import lifestyleImg from '../assets/images/lifestyle_livia_martins_1794799600925.jpg';
+import fashionImg from '../assets/images/fashion_marina_costa_1794799601160.jpg';
+import beautyImg from '../assets/images/beauty_isabela_rocha_1794799601158.jpg';
+import fitnessImg from '../assets/images/fitness_camila_mendes_1794799602039.jpg';
+import realityFlowImg from '../assets/images/reality_flow_editorial_1794799602185.jpg';
+import digitalCoutureImg from '../assets/images/digital_couture_editorial_1794799602225.jpg';
+import beautyverseImg from '../assets/images/beautyverse_editorial_1794799602516.jpg';
+import humanPerformanceImg from '../assets/images/human_performance_editorial_1794799602848.jpg';
 
 export type CollectionId = 'creator-pro' | 'creator-pro-experience';
 
@@ -42,7 +42,7 @@ export const PORTFOLIO_COLLECTIONS: PortfolioCollection[] = [
     title: 'Creator Pro',
     subtitle: 'Apresentações comerciais',
     description:
-      'Páginas comerciais de alto padrão estruturadas para traduzir identidade, métricas reais e propostas de colaboração para marcas.',
+      'Páginas comerciais de estética editorial desenhadas para traduzir identidade, território criativo e propostas de parceria para marcas.',
   },
   {
     id: 'creator-pro-experience',
@@ -50,7 +50,7 @@ export const PORTFOLIO_COLLECTIONS: PortfolioCollection[] = [
     title: 'Creator Pro Experience',
     subtitle: 'Experiências digitais avançadas',
     description:
-      'Universos interativos com direção de arte autoral, motion design e narrativa espacial sob medida para posicionamento de referência.',
+      'Narrativas digitais imersivas com direção de arte autoral, ritmo cinematográfico e composição interativa sob medida.',
   },
 ];
 
@@ -71,7 +71,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     shortDescription:
       'Apresentação comercial com curadoria editorial de rotina, hospitalidade e parcerias para marcas de estilo de vida.',
     image: lifestyleImg,
-    imageAlt: 'Prévia do projeto Lifestyle — Lívia Martins em ambiente arquitetônico iluminado',
+    imageAlt: 'Editorial Lifestyle — Lívia Martins em ambiente arquitetônico iluminado',
     url: 'https://creator-pro-lifestyle.vercel.app/',
   },
   {
@@ -83,9 +83,9 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     creatorOrFocus: 'Marina Costa',
     category: 'Fashion',
     shortDescription:
-      'Vitrine de posicionamento em moda autoral com foco em direção estética, editoriais e campanhas de luxo contemporâneo.',
+      'Vitrine de posicionamento em moda autoral com foco em direção estética, editoriais e campanhas contemporâneas.',
     image: fashionImg,
-    imageAlt: 'Prévia do projeto Fashion — Marina Costa em editorial minimalista de alta costura',
+    imageAlt: 'Editorial Fashion — Marina Costa em arquitetura brutalista de concreto',
     url: 'https://creator-pro-fashion.vercel.app/',
   },
   {
@@ -97,9 +97,9 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     creatorOrFocus: 'Isabela Rocha',
     category: 'Beauty',
     shortDescription:
-      'Estrutura comercial desenhada para conectar autoridade em skincare, perfumaria e campanhas de beleza de alto valor.',
+      'Estrutura comercial desenhada para conectar autoridade em skincare, perfumaria e campanhas de beleza.',
     image: beautyImg,
-    imageAlt: 'Prévia do projeto Beauty — Isabela Rocha com iluminação quente de estúdio',
+    imageAlt: 'Editorial Beauty — Isabela Rocha com iluminação natural de estúdio',
     url: 'https://creator-pro-beauty.vercel.app/',
   },
   {
@@ -113,7 +113,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     shortDescription:
       'Posicionamento estratégico para performance atlética, bem-estar e colaborações com marcas esportivas.',
     image: fitnessImg,
-    imageAlt: 'Prévia do projeto Fitness — Camila Mendes em cena atlética de alto contraste',
+    imageAlt: 'Editorial Fitness — Camila Mendes em cena atlética de alto contraste',
     url: 'https://creator-pro-fitness.vercel.app/',
   },
 
@@ -127,9 +127,9 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     creatorOrFocus: 'Lifestyle',
     category: 'Lifestyle',
     shortDescription:
-      'Experiência digital contínua que transforma cotidiano, curadoria e narrativa audiovisual em uma jornada interativa fluida.',
+      'Experiência digital contínua que transforma cotidiano, curadoria e narrativa visual em uma jornada editorial fluida.',
     image: realityFlowImg,
-    imageAlt: 'Prévia do projeto Reality Flow com escultura espacial translúcida em luz dourada',
+    imageAlt: 'Editorial Reality Flow com silhueta em linho sob luz natural mediterrânea',
     url: 'https://prumo-creators-creator-pro-experien.vercel.app/',
   },
   {
@@ -141,9 +141,9 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     creatorOrFocus: 'Fashion',
     category: 'Fashion',
     shortDescription:
-      'Passarela espacial tridimensional onde silhueta, tecido digital e editorial interativo elevam o discurso de moda.',
+      'Editorial interativo de alta moda onde silhueta, alfaiataria arquitetônica e direção visual elevam o discurso de marca.',
     image: digitalCoutureImg,
-    imageAlt: 'Prévia do projeto Digital Couture com escultura têxtil metálica suspensa',
+    imageAlt: 'Editorial Digital Couture com vestido plissado escultural em galeria minimalista',
     url: '',
   },
   {
@@ -155,9 +155,9 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     creatorOrFocus: 'Beauty',
     category: 'Beauty',
     shortDescription:
-      'Ambiente sensorial interativo para apresentação de lançamentos, texturas e narrativas visuais no universo beauty.',
+      'Ambiente sensorial editorial para apresentação de texturas, campanhas e narrativas visuais no universo beauty.',
     image: beautyverseImg,
-    imageAlt: 'Prévia do projeto Beautyverse com instalação óptica em vidro e âmbar',
+    imageAlt: 'Editorial Beautyverse com perfil minimalista sobre calcário bruto e luz natural',
     url: '',
   },
   {
@@ -169,9 +169,9 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     creatorOrFocus: 'Fitness',
     category: 'Fitness',
     shortDescription:
-      'Experiência imersiva orientada por movimento, disciplina e engenharia visual para creators de alta performance.',
+      'Experiência orientada por movimento, disciplina e estética contemporânea para creators de alta performance.',
     image: humanPerformanceImg,
-    imageAlt: 'Prévia do projeto Human Performance com escultura biomecânica cinética',
+    imageAlt: 'Editorial Human Performance em movimento dentro de átrio arquitetônico iluminado',
     url: '',
   },
 ];

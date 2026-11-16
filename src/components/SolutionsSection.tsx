@@ -1,153 +1,153 @@
-import { motion } from 'motion/react';
-import { SOLUTIONS, type SolutionItem } from '../data/studio';
-
-function SolutionDiagram({ index }: { index: string }) {
-  if (index === '01') {
-    return (
-      <svg
-        viewBox="0 0 180 90"
-        className="w-full h-24 text-[#D4A853]"
-        fill="none"
-        aria-hidden="true"
-      >
-        <rect x="8" y="12" width="164" height="66" stroke="currentColor" strokeOpacity="0.28" />
-        <line x1="8" y1="28" x2="172" y2="28" stroke="currentColor" strokeOpacity="0.2" />
-        <rect x="18" y="38" width="54" height="28" stroke="currentColor" strokeOpacity="0.65" />
-        <line x1="84" y1="42" x2="156" y2="42" stroke="currentColor" strokeOpacity="0.45" />
-        <line x1="84" y1="52" x2="140" y2="52" stroke="currentColor" strokeOpacity="0.25" />
-        <line x1="84" y1="62" x2="120" y2="62" stroke="currentColor" strokeOpacity="0.25" />
-      </svg>
-    );
-  }
-  if (index === '02') {
-    return (
-      <svg
-        viewBox="0 0 180 90"
-        className="w-full h-24 text-[#D4A853]"
-        fill="none"
-        aria-hidden="true"
-      >
-        <ellipse cx="90" cy="45" rx="64" ry="26" stroke="currentColor" strokeOpacity="0.35" />
-        <ellipse
-          cx="90"
-          cy="45"
-          rx="42"
-          ry="16"
-          transform="rotate(-18 90 45)"
-          stroke="currentColor"
-          strokeOpacity="0.7"
-        />
-        <circle cx="90" cy="45" r="7" stroke="currentColor" strokeWidth="1.5" />
-      </svg>
-    );
-  }
-  if (index === '03') {
-    return (
-      <svg
-        viewBox="0 0 180 90"
-        className="w-full h-24 text-[#D4A853]"
-        fill="none"
-        aria-hidden="true"
-      >
-        <rect x="24" y="16" width="38" height="58" stroke="currentColor" strokeOpacity="0.6" />
-        <rect x="71" y="16" width="38" height="58" stroke="currentColor" strokeOpacity="0.35" />
-        <rect x="118" y="16" width="38" height="58" stroke="currentColor" strokeOpacity="0.2" />
-        <line x1="16" y1="45" x2="164" y2="45" stroke="currentColor" strokeOpacity="0.45" />
-      </svg>
-    );
-  }
-  return (
-    <svg
-      viewBox="0 0 180 90"
-      className="w-full h-24 text-[#D4A853]"
-      fill="none"
-      aria-hidden="true"
-    >
-      <polygon points="90,10 144,45 90,80 36,45" stroke="currentColor" strokeOpacity="0.55" />
-      <polygon points="90,22 124,45 90,68 56,45" stroke="currentColor" strokeOpacity="0.3" />
-      <line x1="20" y1="45" x2="160" y2="45" stroke="currentColor" strokeOpacity="0.2" />
-    </svg>
-  );
-}
-
-function SolutionCard({ item, idx }: { item: SolutionItem; idx: number }) {
-  const isWide = item.featured;
-
-  return (
-    <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.55, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
-      className={`group relative flex flex-col justify-between p-7 sm:p-9 bg-[#0E0E13] border border-white/[0.08] hover:border-[#D4A853]/50 transition-colors duration-200 ${
-        isWide ? 'lg:col-span-7' : 'lg:col-span-5'
-      }`}
-    >
-      <div>
-        <div className="flex items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
-          <span className="font-mono text-xs text-[#D4A853] tabular-nums">{item.index}</span>
-          <span className="text-xs text-[#A1A1AA] truncate">{item.subtitle}</span>
-        </div>
-
-        <div className="my-7 p-4 bg-[#070709] border border-white/[0.06]">
-          <SolutionDiagram index={item.index} />
-        </div>
-
-        <h3 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight text-[#F5F4F0] group-hover:text-[#D4A853] transition-colors duration-200">
-          {item.title}
-        </h3>
-
-        <p className="mt-3 text-sm sm:text-base leading-relaxed text-[#A1A1AA]">
-          {item.description}
-        </p>
-      </div>
-
-      <div className="mt-8 pt-5 border-t border-white/[0.08] flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-[#D4D4D8]">
-        {item.deliverables.map((deliv, i) => (
-          <span key={deliv} className="inline-flex items-center gap-3">
-            <span>{deliv}</span>
-            {i < item.deliverables.length - 1 && (
-              <span aria-hidden="true" className="text-[#D4A853]">
-                ·
-              </span>
-            )}
-          </span>
-        ))}
-      </div>
-    </motion.article>
-  );
-}
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { ArrowUpRight } from 'lucide-react';
+import { SOLUTIONS } from '../data/studio';
 
 export function SolutionsSection() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
+  const activeSolution = SOLUTIONS[activeIndex];
+
   return (
     <section
       id="solucoes"
-      className="relative py-24 sm:py-32 bg-[#070709] border-t border-white/[0.08] prumo-grid-surface"
+      className="relative py-24 sm:py-32 lg:py-36 bg-[#EAE7DF] text-[#0A0A0A] border-t border-[#0A0A0A]/10"
     >
-      <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14">
+      <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-14">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-12 border-b border-[#0A0A0A]/15">
           <div className="max-w-2xl">
-            <p className="text-xs font-medium tracking-[0.14em] text-[#D4A853] mb-4">
-              02. Soluções
+            <p className="text-xs font-medium tracking-[0.18em] uppercase text-[#8C261A] mb-4">
+              02 · Soluções
             </p>
-            <h2 className="font-display text-[clamp(1.85rem,3.4vw,3rem)] font-semibold leading-[1.1] tracking-[-0.02em] text-[#F5F4F0] [text-wrap:balance]">
-              Arquitetura digital desenhada para cada estágio de posicionamento.
+            <h2 className="font-serif text-[clamp(2.1rem,3.8vw,3.5rem)] font-medium leading-[1.04] tracking-[-0.02em] text-[#0A0A0A] [text-wrap:balance]">
+              Quatro formatos autorais para estruturar{' '}
+              <span className="italic font-normal">posicionamento</span> e diálogo com marcas.
             </h2>
           </div>
 
-          <p className="max-w-md text-sm sm:text-base leading-relaxed text-[#A1A1AA]">
-            Quatro frentes complementares para estruturar a presença comercial e a expressão visual
-            de creators com padrão de estúdio internacional.
+          <p className="max-w-md text-sm sm:text-base leading-relaxed text-[#57534E]">
+            Selecione uma frente para explorar a composição visual e os elementos que integram cada
+            entrega da Prumo Creators.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Row 1: Creator Pro (7) + Digital Identity (5) */}
-          <SolutionCard item={SOLUTIONS[0]} idx={0} />
-          <SolutionCard item={SOLUTIONS[2]} idx={1} />
-          {/* Row 2: Custom Experiences (5) + Creator Pro Experience (7) */}
-          <SolutionCard item={SOLUTIONS[3]} idx={2} />
-          <SolutionCard item={SOLUTIONS[1]} idx={3} />
+        {/* Interactive Editorial Lookbook Split */}
+        <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+          {/* Left: Numbered Editorial Index */}
+          <div className="lg:col-span-7 divide-y divide-[#0A0A0A]/15 border-b border-[#0A0A0A]/15">
+            {SOLUTIONS.map((item, idx) => {
+              const isActive = idx === activeIndex;
+              return (
+                <div key={item.id} className="py-7 sm:py-8">
+                  <button
+                    type="button"
+                    onClick={() => setActiveIndex(idx)}
+                    onMouseEnter={() => setActiveIndex(idx)}
+                    className="w-full text-left group cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0A0A0A]"
+                  >
+                    <div className="flex items-baseline justify-between gap-6">
+                      <div className="flex items-baseline gap-5 sm:gap-7">
+                        <span
+                          className={`text-xs font-medium tracking-[0.14em] tabular-nums transition-colors ${
+                            isActive ? 'text-[#8C261A]' : 'text-[#6B6860]'
+                          }`}
+                        >
+                          {item.index}
+                        </span>
+                        <h3
+                          className={`font-serif text-3xl sm:text-4xl font-medium tracking-tight transition-colors ${
+                            isActive
+                              ? 'text-[#0A0A0A]'
+                              : 'text-[#0A0A0A]/55 group-hover:text-[#0A0A0A]'
+                          }`}
+                        >
+                          {item.title}
+                        </h3>
+                      </div>
+
+                      <ArrowUpRight
+                        className={`w-5 h-5 shrink-0 transition-transform duration-200 ${
+                          isActive
+                            ? 'text-[#8C261A] translate-x-0.5 -translate-y-0.5'
+                            : 'text-[#6B6860] group-hover:text-[#0A0A0A]'
+                        }`}
+                        aria-hidden="true"
+                      />
+                    </div>
+
+                    <p className="mt-2 pl-9 sm:pl-11 text-xs sm:text-sm font-medium tracking-wide text-[#57534E]">
+                      {item.subtitle}
+                    </p>
+                  </button>
+
+                  {isActive && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                      className="mt-5 pl-9 sm:pl-11 space-y-4"
+                    >
+                      <p className="text-sm sm:text-base leading-relaxed text-[#2D2B27] max-w-xl">
+                        {item.description}
+                      </p>
+
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[#57534E]">
+                        {item.deliverables.map((deliv, dIdx) => (
+                          <span key={deliv} className="inline-flex items-center gap-3">
+                            <span className="font-medium text-[#0A0A0A]">{deliv}</span>
+                            {dIdx < item.deliverables.length - 1 && (
+                              <span aria-hidden="true" className="text-[#8C261A]">
+                                ·
+                              </span>
+                            )}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Right: Editorial Lookbook Plate */}
+          <div className="lg:col-span-5 lg:sticky lg:top-24">
+            <div className="bg-[#F6F4EE] p-3 border border-[#0A0A0A]/12">
+              <div className="relative aspect-[3/4] overflow-hidden bg-[#141414]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeSolution.id}
+                    initial={{ opacity: 0, scale: 1.02 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                    className="w-full h-full"
+                  >
+                    {!imgErrors[activeSolution.id] ? (
+                      <img
+                        src={activeSolution.image}
+                        alt={activeSolution.imageAlt}
+                        referrerPolicy="no-referrer"
+                        onError={() =>
+                          setImgErrors((prev) => ({ ...prev, [activeSolution.id]: true }))
+                        }
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center p-8 text-center bg-[#181818] text-[#F6F4EE]">
+                        <span className="font-serif text-2xl">{activeSolution.title}</span>
+                      </div>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              <div className="pt-3 px-1 flex items-center justify-between text-xs tracking-[0.1em] uppercase text-[#57534E]">
+                <span className="font-medium text-[#0A0A0A]">{activeSolution.title}</span>
+                <span className="tabular-nums">{activeSolution.index} / 04</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

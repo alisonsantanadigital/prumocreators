@@ -1,30 +1,49 @@
-import { useState } from 'react';
-import { ArrowUpRight, Clock } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import {
   PORTFOLIO_COLLECTIONS,
   PORTFOLIO_PROJECTS,
   type CollectionId,
+  type PortfolioCollection,
   type PortfolioProject,
 } from '../data/portfolio';
 
 type FilterState = 'all' | CollectionId;
+type LayoutMode = 'horizontal' | 'grid';
 
-function ProjectCard({ project, idx }: { project: PortfolioProject; idx: number }) {
+function ProjectCard({
+  project,
+  idx,
+  layoutMode,
+}: {
+  project: PortfolioProject;
+  idx: number;
+  layoutMode: LayoutMode;
+}) {
   const [imgError, setImgError] = useState(false);
   const hasLiveUrl = Boolean(project.url && project.url.trim().length > 0);
+  const isTallCrop = layoutMode === 'horizontal' && idx % 2 === 1;
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.55, delay: (idx % 2) * 0.08, ease: [0.16, 1, 0.3, 1] }}
-      className="group flex flex-col justify-between bg-[#0E0E13] border border-white/[0.08] hover:border-[#D4A853]/55 transition-colors duration-200 overflow-hidden"
+      transition={{ duration: 0.55, delay: (idx % 4) * 0.06, ease: [0.16, 1, 0.3, 1] }}
+      className={`group flex flex-col justify-between bg-[#0A0A0A] border border-white/10 hover:border-white/35 transition-colors duration-200 ${
+        layoutMode === 'horizontal'
+          ? 'snap-start shrink-0 w-[82vw] sm:w-[46vw] lg:w-[34vw] xl:w-[29vw]'
+          : 'w-full'
+      }`}
     >
       <div>
-        {/* Project Preview Image */}
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#14141A] border-b border-white/[0.08]">
+        {/* Editorial Photography Crop */}
+        <div
+          className={`relative w-full overflow-hidden bg-[#141414] border-b border-white/10 ${
+            isTallCrop ? 'aspect-[4/4.4]' : 'aspect-[4/3]'
+          }`}
+        >
           {!imgError ? (
             <img
               src={project.image}
@@ -32,52 +51,47 @@ function ProjectCard({ project, idx }: { project: PortfolioProject; idx: number 
               referrerPolicy="no-referrer"
               loading="lazy"
               onError={() => setImgError(true)}
-              className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
             />
           ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-[#16161C] to-[#070709]">
-              <span className="font-mono text-xs text-[#D4A853] tabular-nums">{project.index}</span>
-              <span className="mt-2 font-display text-lg font-semibold text-[#F5F4F0]">
-                {project.name}
+            <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-[#141414]">
+              <span className="text-xs tracking-[0.15em] text-[#9A968E] tabular-nums">
+                {project.index}
               </span>
+              <span className="mt-2 font-serif text-2xl text-[#F6F4EE]">{project.name}</span>
             </div>
           )}
-
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-t from-[#070709]/70 via-transparent to-transparent opacity-80 group-hover:opacity-50 transition-opacity duration-300 pointer-events-none"
-          />
         </div>
 
-        {/* Project Copy & Unboxed Metadata */}
+        {/* Unboxed Editorial Caption */}
         <div className="p-6 sm:p-7">
-          <div className="flex items-center justify-between gap-3 text-xs text-[#A1A1AA]">
+          <div className="flex items-center justify-between gap-3 text-[11px] font-medium tracking-[0.14em] uppercase text-[#9A968E]">
             <span className="inline-flex items-center gap-2">
-              <span className="font-mono text-[#D4A853] tabular-nums">{project.index}</span>
+              <span className="text-[#F6F4EE] tabular-nums">{project.index}</span>
               <span aria-hidden="true">/</span>
               <span>{project.category}</span>
             </span>
             <span>{project.collectionLabel}</span>
           </div>
 
-          <h4 className="mt-3 font-display text-xl sm:text-2xl font-semibold tracking-tight text-[#F5F4F0] group-hover:text-[#D4A853] transition-colors duration-150">
+          <h4 className="mt-3 font-serif text-2xl sm:text-[1.7rem] font-medium leading-tight tracking-tight text-[#F6F4EE] group-hover:italic transition-all">
             {project.name}
           </h4>
 
-          <p className="mt-3 text-sm leading-relaxed text-[#A1A1AA]">
+          <p className="mt-3 text-sm leading-relaxed text-[#B5B0A6]">
             {project.shortDescription}
           </p>
         </div>
       </div>
 
-      {/* Action Footer: Live External Link OR In-Development State */}
-      <div className="px-6 sm:px-7 pb-6 sm:pb-7 pt-4 border-t border-white/[0.06] flex items-center justify-between gap-4">
+      {/* External Action OR In-Development Label */}
+      <div className="px-6 sm:px-7 pb-6 sm:pb-7 pt-4 border-t border-white/10">
         {hasLiveUrl ? (
           <a
             href={project.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full inline-flex items-center justify-between gap-3 px-5 py-3 text-xs font-semibold tracking-wider text-[#070709] bg-[#F5F4F0] group-hover:bg-[#D4A853] transition-colors duration-150 whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4A853]"
+            className="w-full inline-flex items-center justify-between gap-3 px-5 py-3 text-xs font-semibold tracking-[0.14em] uppercase text-[#0A0A0A] bg-[#F6F4EE] group-hover:bg-[#8C261A] group-hover:text-[#F6F4EE] transition-colors duration-150 whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F6F4EE]"
           >
             <span>EXPLORAR EXPERIÊNCIA</span>
             <ArrowUpRight
@@ -86,9 +100,8 @@ function ProjectCard({ project, idx }: { project: PortfolioProject; idx: number 
             />
           </a>
         ) : (
-          <div className="w-full inline-flex items-center justify-between gap-3 px-4 py-3 text-xs font-medium text-[#A1A1AA] bg-[#09090C] border border-white/[0.06]">
-            <span>Demonstração em desenvolvimento</span>
-            <Clock className="w-3.5 h-3.5 text-[#D4A853]/70 shrink-0" aria-hidden="true" />
+          <div className="w-full py-3 px-4 border border-white/10 text-xs tracking-[0.1em] uppercase text-[#9A968E] text-center">
+            Demonstração em desenvolvimento
           </div>
         )}
       </div>
@@ -96,8 +109,92 @@ function ProjectCard({ project, idx }: { project: PortfolioProject; idx: number 
   );
 }
 
+function CollectionBlock({
+  collection,
+  projects,
+  layoutMode,
+}: {
+  collection: PortfolioCollection;
+  projects: PortfolioProject[];
+  layoutMode: LayoutMode;
+}) {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollByCard = (direction: 'prev' | 'next') => {
+    const track = trackRef.current;
+    if (!track) return;
+    const distance = Math.max(track.clientWidth * 0.65, 320);
+    track.scrollBy({
+      left: direction === 'next' ? distance : -distance,
+      behavior: 'smooth',
+    });
+  };
+
+  return (
+    <div>
+      {/* Collection Editorial Header + Horizontal Controls */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8 items-end mb-8">
+        <div className="lg:col-span-6">
+          <p className="text-xs font-medium tracking-[0.18em] uppercase text-[#9A968E] mb-2 tabular-nums">
+            COLEÇÃO {collection.number} · {collection.subtitle}
+          </p>
+          <h3 className="font-serif text-3xl sm:text-4xl font-medium text-[#F6F4EE]">
+            {collection.title}
+          </h3>
+        </div>
+
+        <div className="lg:col-span-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <p className="text-sm leading-relaxed text-[#B5B0A6] max-w-md">
+            {collection.description}
+          </p>
+
+          {layoutMode === 'horizontal' && (
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => scrollByCard('prev')}
+                aria-label={`Rolar ${collection.title} para a esquerda`}
+                className="w-10 h-10 inline-flex items-center justify-center border border-white/20 text-[#F6F4EE] hover:border-[#F6F4EE] hover:bg-[#F6F4EE] hover:text-[#0A0A0A] transition-colors cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollByCard('next')}
+                aria-label={`Rolar ${collection.title} para a direita`}
+                className="w-10 h-10 inline-flex items-center justify-center border border-white/20 text-[#F6F4EE] hover:border-[#F6F4EE] hover:bg-[#F6F4EE] hover:text-[#0A0A0A] transition-colors cursor-pointer"
+              >
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Horizontal Runway OR Editorial Grid */}
+      {layoutMode === 'horizontal' ? (
+        <div
+          ref={trackRef}
+          className="editorial-scroll-track flex items-start gap-6 overflow-x-auto pb-6 snap-x snap-mandatory"
+        >
+          {projects.map((project, idx) => (
+            <ProjectCard key={project.id} project={project} idx={idx} layoutMode="horizontal" />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+          {projects.map((project, idx) => (
+            <ProjectCard key={project.id} project={project} idx={idx} layoutMode="grid" />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function PortfolioSection() {
   const [activeFilter, setActiveFilter] = useState<FilterState>('all');
+  const [layoutMode, setLayoutMode] = useState<LayoutMode>('horizontal');
 
   const visibleCollections =
     activeFilter === 'all'
@@ -105,97 +202,114 @@ export function PortfolioSection() {
       : PORTFOLIO_COLLECTIONS.filter((c) => c.id === activeFilter);
 
   return (
-    <section id="portfolio" className="relative py-24 sm:py-32 bg-[#070709] border-t border-white/[0.08]">
-      <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-        {/* Section Header + Interactive Collection Filter */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-12 border-b border-white/[0.08]">
+    <section
+      id="portfolio"
+      className="relative py-24 sm:py-32 lg:py-36 bg-[#0A0A0A] text-[#F6F4EE] border-t border-white/10"
+    >
+      <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-14">
+        {/* Section Header + Collection & Layout Controls */}
+        <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 pb-12 border-b border-white/15">
           <div className="max-w-2xl">
-            <p className="text-xs font-medium tracking-[0.14em] text-[#D4A853] mb-4">
-              03. Portfólio · Centro da Experiência
+            <p className="text-xs font-medium tracking-[0.18em] uppercase text-[#9A968E] mb-4">
+              03 · Portfólio — Centro da Experiência
             </p>
-            <h2 className="font-display text-[clamp(2rem,3.6vw,3.25rem)] font-semibold leading-[1.08] tracking-[-0.025em] text-[#F5F4F0] [text-wrap:balance]">
-              Oito projetos independentes divididos em duas coleções autorais.
+            <h2 className="font-serif text-[clamp(2.2rem,4vw,3.75rem)] font-medium leading-[1.02] tracking-[-0.02em] text-[#F6F4EE] [text-wrap:balance]">
+              Oito projetos independentes em duas{' '}
+              <span className="italic font-normal">coleções editoriais</span>.
             </h2>
           </div>
 
-          {/* Interactive Filter Controls */}
-          <div
-            role="tablist"
-            aria-label="Filtrar coleções do portfólio"
-            className="inline-flex flex-wrap items-center gap-1.5 p-1.5 bg-[#0E0E13] border border-white/[0.08]"
-          >
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeFilter === 'all'}
-              onClick={() => setActiveFilter('all')}
-              className={`px-4 py-2 text-xs font-semibold transition-colors duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#D4A853] ${
-                activeFilter === 'all'
-                  ? 'bg-[#D4A853] text-[#070709]'
-                  : 'text-[#A1A1AA] hover:text-[#F5F4F0]'
-              }`}
+          <div className="flex flex-wrap items-center gap-4">
+            {/* Collection Filter */}
+            <div
+              role="tablist"
+              aria-label="Filtrar coleções do portfólio"
+              className="inline-flex flex-wrap items-center gap-1 p-1 border border-white/15 bg-[#121212]"
             >
-              Todas as Coleções
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeFilter === 'creator-pro'}
-              onClick={() => setActiveFilter('creator-pro')}
-              className={`px-4 py-2 text-xs font-semibold transition-colors duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#D4A853] ${
-                activeFilter === 'creator-pro'
-                  ? 'bg-[#D4A853] text-[#070709]'
-                  : 'text-[#A1A1AA] hover:text-[#F5F4F0]'
-              }`}
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeFilter === 'all'}
+                onClick={() => setActiveFilter('all')}
+                className={`px-3.5 py-2 text-xs font-medium tracking-[0.06em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                  activeFilter === 'all'
+                    ? 'bg-[#F6F4EE] text-[#0A0A0A]'
+                    : 'text-[#B5B0A6] hover:text-[#F6F4EE]'
+                }`}
+              >
+                Todas
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeFilter === 'creator-pro'}
+                onClick={() => setActiveFilter('creator-pro')}
+                className={`px-3.5 py-2 text-xs font-medium tracking-[0.06em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                  activeFilter === 'creator-pro'
+                    ? 'bg-[#F6F4EE] text-[#0A0A0A]'
+                    : 'text-[#B5B0A6] hover:text-[#F6F4EE]'
+                }`}
+              >
+                01 · Creator Pro
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeFilter === 'creator-pro-experience'}
+                onClick={() => setActiveFilter('creator-pro-experience')}
+                className={`px-3.5 py-2 text-xs font-medium tracking-[0.06em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                  activeFilter === 'creator-pro-experience'
+                    ? 'bg-[#F6F4EE] text-[#0A0A0A]'
+                    : 'text-[#B5B0A6] hover:text-[#F6F4EE]'
+                }`}
+              >
+                02 · Experience
+              </button>
+            </div>
+
+            {/* Layout Mode Switcher */}
+            <div
+              role="group"
+              aria-label="Modo de exibição da galeria"
+              className="inline-flex items-center gap-1 p-1 border border-white/15 bg-[#121212]"
             >
-              01 · Creator Pro
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeFilter === 'creator-pro-experience'}
-              onClick={() => setActiveFilter('creator-pro-experience')}
-              className={`px-4 py-2 text-xs font-semibold transition-colors duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#D4A853] ${
-                activeFilter === 'creator-pro-experience'
-                  ? 'bg-[#D4A853] text-[#070709]'
-                  : 'text-[#A1A1AA] hover:text-[#F5F4F0]'
-              }`}
-            >
-              02 · Creator Pro Experience
-            </button>
+              <button
+                type="button"
+                onClick={() => setLayoutMode('horizontal')}
+                className={`px-3 py-2 text-xs font-medium tracking-[0.06em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                  layoutMode === 'horizontal'
+                    ? 'bg-[#8C261A] text-[#F6F4EE]'
+                    : 'text-[#B5B0A6] hover:text-[#F6F4EE]'
+                }`}
+              >
+                Galeria Horizontal
+              </button>
+              <button
+                type="button"
+                onClick={() => setLayoutMode('grid')}
+                className={`px-3 py-2 text-xs font-medium tracking-[0.06em] uppercase transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                  layoutMode === 'grid'
+                    ? 'bg-[#8C261A] text-[#F6F4EE]'
+                    : 'text-[#B5B0A6] hover:text-[#F6F4EE]'
+                }`}
+              >
+                Grade
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Collections Loop */}
-        <div className="mt-14 space-y-20">
+        <div className="mt-14 space-y-24">
           {visibleCollections.map((collection) => {
             const projects = PORTFOLIO_PROJECTS.filter((p) => p.collection === collection.id);
-
             return (
-              <div key={collection.id}>
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8 items-baseline mb-8">
-                  <div className="lg:col-span-6 flex items-baseline gap-4">
-                    <span className="font-mono text-sm text-[#D4A853] tabular-nums">
-                      COLEÇÃO {collection.number}
-                    </span>
-                    <h3 className="font-display text-2xl sm:text-3xl font-semibold text-[#F5F4F0]">
-                      {collection.title}
-                    </h3>
-                  </div>
-                  <div className="lg:col-span-6 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-                    <span className="text-sm font-medium text-[#D4A853]">
-                      {collection.subtitle}
-                    </span>
-                    <p className="text-sm text-[#A1A1AA] max-w-md">{collection.description}</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-                  {projects.map((project, idx) => (
-                    <ProjectCard key={project.id} project={project} idx={idx} />
-                  ))}
-                </div>
-              </div>
+              <CollectionBlock
+                key={collection.id}
+                collection={collection}
+                projects={projects}
+                layoutMode={layoutMode}
+              />
             );
           })}
         </div>

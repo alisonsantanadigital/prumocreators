@@ -1,4 +1,11 @@
-import aboutStudioImg from '../assets/images/about_editorial_studio_1794793898160.jpg';
+import heroCampaignImg from '../assets/images/hero_fashion_campaign_1794799599677.jpg';
+import heroInsetImg from '../assets/images/hero_detail_inset_1794799599281.jpg';
+import aboutAtelierImg from '../assets/images/about_atelier_fashion_1794799600562.jpg';
+import aboutStudioImg from '../assets/images/about_editorial_studio_1794799600703.jpg';
+import realityFlowImg from '../assets/images/reality_flow_editorial_1794799602185.jpg';
+import digitalCoutureImg from '../assets/images/digital_couture_editorial_1794799602225.jpg';
+import beautyverseImg from '../assets/images/beautyverse_editorial_1794799602516.jpg';
+import fashionMarinaImg from '../assets/images/fashion_marina_costa_1794799601160.jpg';
 
 export interface SolutionItem {
   id: string;
@@ -7,13 +14,23 @@ export interface SolutionItem {
   subtitle: string;
   description: string;
   deliverables: string[];
-  featured?: boolean;
+  image: string;
+  imageAlt: string;
 }
 
 export const STUDIO_MEDIA = {
-  aboutImage: aboutStudioImg,
-  aboutImageAlt:
-    'Estúdio arquitetônico da Prumo Creators com iluminação direcional quente e superfícies monolíticas escuras',
+  heroCampaign: heroCampaignImg,
+  heroCampaignAlt:
+    'Campanha editorial de moda contemporânea em galeria brutalista iluminada com alfaiataria escultural em preto e cinza quente',
+  heroInset: heroInsetImg,
+  heroInsetAlt:
+    'Detalhe editorial em close de lapela de casaco em lã preta e manga escultural em seda contra travertino',
+  aboutAtelier: aboutAtelierImg,
+  aboutAtelierAlt:
+    'Ateliê de direção criativa em luz natural com mesa de carvalho, provas editoriais e amostras têxteis',
+  aboutDetail: aboutStudioImg,
+  aboutDetailAlt:
+    'Recorte arquitetônico do estúdio com blocos de pedra travertino e iluminação direcional',
 };
 
 export const SOLUTIONS: SolutionItem[] = [
@@ -25,7 +42,8 @@ export const SOLUTIONS: SolutionItem[] = [
     description:
       'Arquitetura comercial sob medida para organizar histórico criativo, perfil de audiência, formatos de entrega e proposta de valor em um endereço próprio.',
     deliverables: ['Direção visual autoral', 'Estrutura orientada a marcas', 'Navegação direta e responsiva'],
-    featured: true,
+    image: fashionMarinaImg,
+    imageAlt: 'Fotografia editorial de moda representando a solução Creator Pro',
   },
   {
     id: 'creator-pro-experience',
@@ -33,9 +51,10 @@ export const SOLUTIONS: SolutionItem[] = [
     title: 'Creator Pro Experience',
     subtitle: 'Experiências digitais imersivas e interativas',
     description:
-      'Projetos que combinam cenas tridimensionais, motion design cinematográfico e interatividade para transformar a visita de marcas em imersão memorável.',
-    deliverables: ['Cenas 3D & WebGL', 'Coreografia de scroll', 'Narrativa interativa por cena'],
-    featured: true,
+      'Projetos que combinam fotografia em grande escala, direção editorial cinematográfica e interatividade refinada para transformar a visita de marcas em imersão.',
+    deliverables: ['Direção de arte autoral', 'Coreografia de scroll', 'Narrativa interativa por cena'],
+    image: digitalCoutureImg,
+    imageAlt: 'Fotografia de alta costura escultural representando Creator Pro Experience',
   },
   {
     id: 'digital-identity',
@@ -44,7 +63,9 @@ export const SOLUTIONS: SolutionItem[] = [
     subtitle: 'Apresentação e posicionamento digital',
     description:
       'Tradução visual e estratégica do universo do creator, alinhando tipografia, linguagem gráfica e discurso comercial para elevar percepção de valor.',
-    deliverables: ['Sistema visual digital', 'Tom e narrativa de marca', 'Consistência multiplataforma'],
+    deliverables: ['Sistema visual digital', 'Tom e narrativa de marca', 'Consistência editorial'],
+    image: beautyverseImg,
+    imageAlt: 'Retrato editorial minimalista representando Digital Identity',
   },
   {
     id: 'custom-experiences',
@@ -53,7 +74,9 @@ export const SOLUTIONS: SolutionItem[] = [
     subtitle: 'Projetos digitais personalizados',
     description:
       'Desenvolvimento criativo de ativações proprietárias, lançamentos editoriais e plataformas especiais desenhadas a partir de objetivos específicos.',
-    deliverables: ['Conceito criativo exclusivo', 'Desenvolvimento front-end avançado', 'Performance multi-dispositivo'],
+    deliverables: ['Conceito criativo exclusivo', 'Desenvolvimento front-end autoral', 'Performance multi-dispositivo'],
+    image: realityFlowImg,
+    imageAlt: 'Fotografia editorial contemporânea representando Custom Experiences',
   },
 ];
 
