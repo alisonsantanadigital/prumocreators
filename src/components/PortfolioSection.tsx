@@ -540,12 +540,12 @@ export function PortfolioSection() {
     >
       <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
         {/* Abertura Editorial — Destaque Principal dos Projetos Criados */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-end pb-9 border-b border-white/12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end pb-10 border-b border-white/15">
           <div className="lg:col-span-7">
-            <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-[#A58A58] mb-4">
+            <p className="text-xs font-semibold tracking-[0.22em] uppercase text-[#C4A66E] mb-4">
               02 — Projetos Criados
             </p>
-            <h2 className="font-serif text-[clamp(2.15rem,4vw,3.8rem)] font-normal leading-[1.04] tracking-[-0.02em] text-[#F2F0EB] [text-wrap:balance]">
+            <h2 className="font-serif text-[clamp(2.35rem,4.3vw,4.1rem)] font-normal leading-[1.03] tracking-[-0.02em] text-[#F7F5F0] [text-wrap:balance]">
               <StaggeredText
                 stagger={0.045}
                 segments={[
@@ -557,22 +557,50 @@ export function PortfolioSection() {
           </div>
 
           <div className="lg:col-span-5">
-            <p className="text-sm sm:text-base leading-relaxed text-[#A7A49E] max-w-md lg:ml-auto">
-              Este é o centro do nosso trabalho: sites e apresentações prontos para cada perfil.
-              Navegue pelas cartas, amplie a tela ou abra os projetos publicados.
-            </p>
+            <div className="pt-4 border-t border-[#A58A58]/55 lg:max-w-lg lg:ml-auto">
+              <p className="text-base sm:text-[1.0625rem] leading-[1.65] text-[#EAE6DD] font-normal">
+                Este é o centro do nosso trabalho: sites e apresentações prontos para cada perfil.{' '}
+                <span className="text-[#C4A66E]">
+                  Navegue pelas cartas, amplie a tela ou abra os projetos publicados.
+                </span>
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Seleção Discreta de Coleções + Indicador de Posição */}
-        <div className="mt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+        {/* Seleção em Evidência das Duas Coleções — Creator Pro & Creator Pro Experience */}
+        <div className="mt-10">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <p className="text-xs font-medium tracking-[0.2em] uppercase text-[#D6D2C9]">
+              Linhas de Apresentação · Selecione uma coleção
+            </p>
+            <div className="flex items-center gap-3 text-xs tracking-[0.16em] uppercase text-[#C4A66E] font-medium tabular-nums whitespace-nowrap shrink-0">
+              <span>{currentCollectionInfo.title}</span>
+              <span aria-hidden="true" className="text-white/30">
+                /
+              </span>
+              <span>
+                <AnimatedCounter
+                  value={Number(activeProject.globalNumber)}
+                  padLength={2}
+                  duration={550}
+                />{' '}
+                / 08
+              </span>
+            </div>
+          </div>
+
           <div
             role="tablist"
             aria-label="Selecionar coleção de projetos"
-            className="inline-flex items-center gap-6 sm:gap-10 border-b border-white/10 pb-3"
+            className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5"
           >
             {PORTFOLIO_COLLECTIONS.map((col) => {
               const isSelected = activeCollection === col.id;
+              const countInCollection = PORTFOLIO_PROJECTS.filter(
+                (p) => p.collection === col.id,
+              ).length;
+
               return (
                 <button
                   key={col.id}
@@ -580,34 +608,55 @@ export function PortfolioSection() {
                   role="tab"
                   aria-selected={isSelected}
                   onClick={() => handleCollectionChange(col.id)}
-                  className={`relative pb-1 text-left transition-colors cursor-pointer whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A58A58] ${
-                    isSelected ? 'text-[#F2F0EB]' : 'text-[#A7A49E] hover:text-[#F2F0EB]'
+                  className={`group relative text-left p-5 sm:p-6 border transition-all duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A58A58] ${
+                    isSelected
+                      ? 'bg-[#1B1916] border-[#C4A66E] shadow-[0_16px_40px_rgba(0,0,0,0.45)]'
+                      : 'bg-[#151514] border-white/15 hover:border-[#A58A58]/60 hover:bg-[#191815]'
                   }`}
                 >
-                  <span className="text-xs sm:text-sm font-medium tracking-[0.14em] uppercase">
-                    {col.title}
-                  </span>
                   <span
                     aria-hidden="true"
-                    className={`absolute left-0 right-0 -bottom-[13px] h-[1.5px] bg-[#A58A58] transition-transform duration-200 origin-left ${
-                      isSelected ? 'scale-x-100' : 'scale-x-0'
+                    className={`absolute top-0 left-0 right-0 h-[3px] transition-opacity duration-200 ${
+                      isSelected ? 'bg-[#C4A66E] opacity-100' : 'bg-[#A58A58]/40 opacity-0 group-hover:opacity-100'
                     }`}
                   />
+
+                  <div className="flex items-center justify-between gap-3 text-[10px] sm:text-[11px] tracking-[0.12em] sm:tracking-[0.18em] uppercase">
+                    <span
+                      className={`font-semibold tabular-nums whitespace-nowrap ${
+                        isSelected ? 'text-[#C4A66E]' : 'text-[#A7A49E] group-hover:text-[#C4A66E]'
+                      }`}
+                    >
+                      Coleção {col.number} · 0{countInCollection} projetos
+                    </span>
+
+                    <span
+                      className={`font-medium whitespace-nowrap shrink-0 ${
+                        isSelected ? 'text-[#F7F5F0]' : 'text-[#8C8880] group-hover:text-[#D6D2C9]'
+                      }`}
+                    >
+                      {isSelected ? 'Selecionada' : 'Ver coleção'}
+                    </span>
+                  </div>
+
+                  <h3
+                    className={`mt-2.5 font-serif text-2xl sm:text-[2rem] font-normal leading-tight transition-colors ${
+                      isSelected ? 'text-[#F7F5F0]' : 'text-[#D6D2C9] group-hover:text-[#F7F5F0]'
+                    }`}
+                  >
+                    {col.title}
+                  </h3>
+
+                  <p
+                    className={`mt-2 text-xs sm:text-sm leading-relaxed transition-colors ${
+                      isSelected ? 'text-[#DEDAD0]' : 'text-[#A7A49E] group-hover:text-[#C8C4BA]'
+                    }`}
+                  >
+                    {col.subtitle}
+                  </p>
                 </button>
               );
             })}
-          </div>
-
-          <div className="flex items-center justify-between sm:justify-end gap-5 text-xs tracking-[0.16em] uppercase text-[#A7A49E]">
-            <span>{currentCollectionInfo.subtitle}</span>
-            <span className="text-[#A58A58] font-medium tabular-nums whitespace-nowrap shrink-0">
-              <AnimatedCounter
-                value={Number(activeProject.globalNumber)}
-                padLength={2}
-                duration={550}
-              />{' '}
-              / 08
-            </span>
           </div>
         </div>
 
