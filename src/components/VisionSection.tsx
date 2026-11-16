@@ -59,9 +59,9 @@ export function VisionSection() {
           </div>
         </div>
 
-        {/* Large-Scale Asymmetric Editorial Photograph */}
-        <div ref={spreadRef} className="mt-16 sm:mt-20 grid grid-cols-1 lg:grid-cols-12">
-          <div className="lg:col-span-10 lg:col-start-3">
+        {/* Proportional Asymmetric Editorial Photograph */}
+        <div ref={spreadRef} className="mt-14 sm:mt-16 grid grid-cols-1 lg:grid-cols-12">
+          <div className="lg:col-span-8 lg:col-start-5 w-full max-w-[360px] sm:max-w-[540px] lg:max-w-[740px]">
             <div className="aspect-[16/9] overflow-hidden bg-[#E5E2DC]">
               {!imgError ? (
                 <motion.img

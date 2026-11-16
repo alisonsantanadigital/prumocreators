@@ -63,31 +63,33 @@ export function ManifestoSection() {
           </div>
 
           {/* Right Offset Vertical Studio Photography */}
-          <div ref={plateRef} className="lg:col-span-5 lg:pt-12">
-            <div className="aspect-[3/4] overflow-hidden bg-[#E5E2DC]">
-              {!imgError ? (
-                <motion.img
-                  src={STUDIO_MEDIA.manifestoAtelier}
-                  alt={STUDIO_MEDIA.manifestoAtelierAlt}
-                  referrerPolicy="no-referrer"
-                  loading="lazy"
-                  onError={() => setImgError(true)}
-                  initial={prefersReduced ? false : { scale: 1.05, opacity: 0.85 }}
-                  animate={
-                    plateInView || prefersReduced
-                      ? { scale: 1, opacity: 1 }
-                      : { scale: 1.05, opacity: 0.85 }
-                  }
-                  transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                  className="w-full h-full object-cover will-change-transform"
-                />
-              ) : (
-                <div className="w-full h-full bg-[#E5E2DC]" />
-              )}
+          <div ref={plateRef} className="lg:col-span-5 lg:pt-12 flex flex-col lg:items-end">
+            <div className="w-full max-w-[250px] sm:max-w-[300px] lg:max-w-[350px]">
+              <div className="aspect-[3/4] overflow-hidden bg-[#E5E2DC]">
+                {!imgError ? (
+                  <motion.img
+                    src={STUDIO_MEDIA.manifestoAtelier}
+                    alt={STUDIO_MEDIA.manifestoAtelierAlt}
+                    referrerPolicy="no-referrer"
+                    loading="lazy"
+                    onError={() => setImgError(true)}
+                    initial={prefersReduced ? false : { scale: 1.05, opacity: 0.85 }}
+                    animate={
+                      plateInView || prefersReduced
+                        ? { scale: 1, opacity: 1 }
+                        : { scale: 1.05, opacity: 0.85 }
+                    }
+                    transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                    className="w-full h-full object-cover will-change-transform"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-[#E5E2DC]" />
+                )}
+              </div>
+              <p className="mt-3 text-[11px] tracking-[0.14em] uppercase text-[#A7A49E]">
+                Clareza · Posicionamento · Resultados
+              </p>
             </div>
-            <p className="mt-3 text-[11px] tracking-[0.14em] uppercase text-[#A7A49E]">
-              Clareza · Posicionamento · Resultados
-            </p>
           </div>
         </div>
       </div>

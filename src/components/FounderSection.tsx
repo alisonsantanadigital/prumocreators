@@ -22,36 +22,38 @@ export function FounderSection() {
       className="relative py-24 sm:py-32 bg-[#F2F0EB] text-[#111111] border-t border-[#111111]/10"
     >
       <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Founder Portrait */}
-          <div ref={frameRef} className="lg:col-span-5">
-            <div className="aspect-[4/5] max-w-md overflow-hidden bg-[#E5E2DC]">
-              {!imgError ? (
-                <motion.img
-                  src={FOUNDER_PROFILE.photo}
-                  alt={FOUNDER_PROFILE.photoAlt}
-                  loading="lazy"
-                  onError={() => setImgError(true)}
-                  initial={prefersReduced ? false : { scale: 1.04, opacity: 0.85 }}
-                  animate={
-                    frameInView || prefersReduced
-                      ? { scale: 1, opacity: 1 }
-                      : { scale: 1.04, opacity: 0.85 }
-                  }
-                  transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-                  className="w-full h-full object-cover object-top will-change-transform"
-                />
-              ) : (
-                <div className="w-full h-full bg-[#E5E2DC]" />
-              )}
+          <div ref={frameRef} className="lg:col-span-4">
+            <div className="w-full max-w-[220px] sm:max-w-[250px] lg:max-w-[290px]">
+              <div className="aspect-[4/5] overflow-hidden bg-[#E5E2DC]">
+                {!imgError ? (
+                  <motion.img
+                    src={FOUNDER_PROFILE.photo}
+                    alt={FOUNDER_PROFILE.photoAlt}
+                    loading="lazy"
+                    onError={() => setImgError(true)}
+                    initial={prefersReduced ? false : { scale: 1.04, opacity: 0.85 }}
+                    animate={
+                      frameInView || prefersReduced
+                        ? { scale: 1, opacity: 1 }
+                        : { scale: 1.04, opacity: 0.85 }
+                    }
+                    transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+                    className="w-full h-full object-cover object-top will-change-transform"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-[#E5E2DC]" />
+                )}
+              </div>
+              <p className="mt-3 text-[11px] tracking-[0.14em] uppercase text-[#A7A49E]">
+                {FOUNDER_PROFILE.role}
+              </p>
             </div>
-            <p className="mt-3 text-[11px] tracking-[0.14em] uppercase text-[#A7A49E]">
-              {FOUNDER_PROFILE.role}
-            </p>
           </div>
 
           {/* Simple, Direct Biography */}
-          <div className="lg:col-span-7 max-w-2xl">
+          <div className="lg:col-span-8 max-w-2xl">
             <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-[#A58A58] mb-5">
               {FOUNDER_PROFILE.eyebrow}
             </p>
