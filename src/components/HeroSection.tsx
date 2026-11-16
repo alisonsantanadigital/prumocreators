@@ -49,7 +49,7 @@ export function HeroSection() {
             initial={prefersReduced ? false : { scale: 1.06, opacity: 0.5 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full h-full object-cover object-[76%_20%] md:object-[72%_25%] will-change-transform"
+            className="w-full h-full object-cover object-[76%_center] md:object-[80%_center] will-change-transform"
           />
         ) : (
           <div className="w-full h-full bg-[#161513]" />

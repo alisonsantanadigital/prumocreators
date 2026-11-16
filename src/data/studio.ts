@@ -1,12 +1,10 @@
-import heroCampaignImg from '../assets/images/hero_immersive_wide_1794804170810.jpg';
-import heroInsetImg from '../assets/images/hero_detail_inset_1794799599281.jpg';
-import aboutAtelierImg from '../assets/images/about_atelier_fashion_1794799600562.jpg';
-import aboutStudioImg from '../assets/images/about_editorial_studio_1794799600703.jpg';
-import visionSpreadImg from '../assets/images/vision_editorial_spread_1794800182540.jpg';
-import fashionMarinaImg from '../assets/images/fashion_marina_costa_1794799601160.jpg';
-import digitalCoutureImg from '../assets/images/digital_couture_editorial_1794799602225.jpg';
-import beautyverseImg from '../assets/images/beautyverse_editorial_1794799602516.jpg';
-import realityFlowImg from '../assets/images/reality_flow_editorial_1794799602185.jpg';
+import heroCampaignImg from '../assets/images/brazil_hero_studio_1794805121857.jpg';
+import aboutAtelierImg from '../assets/images/brazil_manifesto_atelier_1794805123072.jpg';
+import visionSpreadImg from '../assets/images/brazil_vision_horizon_1794805125799.jpg';
+import practiceCreatorProImg from '../assets/images/brazil_practice_creator_pro_1794805123507.jpg';
+import practiceCreatorExperienceImg from '../assets/images/brazil_practice_creator_experience_1794805124298.jpg';
+import practiceDigitalIdentityImg from '../assets/images/brazil_practice_digital_identity_1794805124677.jpg';
+import practiceCustomExperiencesImg from '../assets/images/brazil_practice_custom_experiences_1794805125846.jpg';
 
 export interface PracticeArea {
   id: string;
@@ -33,24 +31,18 @@ export interface PartnerBrand {
 export const STUDIO_MEDIA = {
   heroCampaign: heroCampaignImg,
   heroCampaignAlt:
-    'Retrato editorial em arquitetura de concreto escuro e travertino iluminado por luz natural direcional',
+    'Estúdio de arquitetura modernista brasileira vazio em São Paulo ao entardecer, com concreto aparente escuro, câmera de cinema em tripé, palmeiras e horizonte dourado',
   /**
    * Vídeo curto, real e sem som para reprodução contínua na abertura (Hero).
    * Preencher somente com arquivo ou URL real e autorizado.
    */
   heroVideo: '' as string,
-  heroInset: heroInsetImg,
-  heroInsetAlt:
-    'Detalhe editorial de alfaiataria em lã preta contra parede em pedra travertino',
   manifestoAtelier: aboutAtelierImg,
   manifestoAtelierAlt:
-    'Ateliê criativo em luz natural com provas editoriais e tecidos sobre mesa de carvalho',
-  studioDetail: aboutStudioImg,
-  studioDetailAlt:
-    'Estúdio de direção criativa com volumes em travertino e luz natural direcional',
+    'Ateliê de arquitetura modernista brasileira sem pessoas, com mesa em jacarandá, câmera, papéis artesanais, cobogós e folhagem de costela-de-adão sob luz natural',
   visionSpread: visionSpreadImg,
   visionSpreadAlt:
-    'Corredor arquitetônico em pedra clara com sombras geométricas e silhueta editorial ao centro',
+    'Terraço modernista brasileiro vazio em concreto e travertino com espelho d’água voltado para as montanhas e baía do Rio de Janeiro ao pôr do sol',
 };
 
 /**
@@ -65,8 +57,9 @@ export const PRACTICE_AREAS: PracticeArea[] = [
     index: '01',
     title: 'CREATOR PRO',
     description: 'Apresentações digitais profissionais para influenciadores.',
-    image: fashionMarinaImg,
-    imageAlt: 'Retrato editorial de moda representando Creator Pro',
+    image: practiceCreatorProImg,
+    imageAlt:
+      'Sala de estúdio brasileira vazia em luz natural com poltrona em freijó e couro, microfone de estúdio e lente de cinema sobre bloco de travertino diante de cobogós',
   },
   {
     id: 'creator-pro-experience',
@@ -74,24 +67,27 @@ export const PRACTICE_AREAS: PracticeArea[] = [
     title: 'CREATOR PRO EXPERIENCE',
     description:
       'Experiências digitais personalizadas, com direção de arte e identidade própria.',
-    image: digitalCoutureImg,
-    imageAlt: 'Composição de alta costura minimalista representando Creator Pro Experience',
+    image: practiceCreatorExperienceImg,
+    imageAlt:
+      'Set de produção vazio em pavilhão curvo de arquitetura modernista brasileira em concreto branco e travertino, com câmera de cinema e monitor de referência',
   },
   {
     id: 'digital-identity',
     index: '03',
     title: 'DIGITAL IDENTITY',
     description: 'Desenvolvimento de posicionamento e identidade digital.',
-    image: beautyverseImg,
-    imageAlt: 'Fotografia editorial minimalista representando Digital Identity',
+    image: practiceDigitalIdentityImg,
+    imageAlt:
+      'Mesa de direção em travertino e madeira freijó sob sombras de cobogós com papéis de algodão, amostras minerais, tablet com grade geométrica e xícara de cafezinho',
   },
   {
     id: 'custom-experiences',
     index: '04',
     title: 'CUSTOM EXPERIENCES',
     description: 'Projetos digitais personalizados para talentos e marcas.',
-    image: realityFlowImg,
-    imageAlt: 'Cena editorial contemporânea representando Custom Experiences',
+    image: practiceCustomExperiencesImg,
+    imageAlt:
+      'Pavilhão contemporâneo brasileiro vazio com forro de madeira ripada, mesa monolítica de travertino, espelho d’água e jardim tropical nativo',
   },
 ];
 
